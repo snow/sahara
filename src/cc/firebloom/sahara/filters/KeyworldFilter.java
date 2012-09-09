@@ -7,7 +7,8 @@ public class KeyworldFilter {
 	static public boolean isSpam(SmsMessage sms){		
 		String msgBody = sms.getMessageBody().toString();
 		
-		String[] keywordList = {"sb", "s2b"};
+		//String[] keywordList = {"sb", "s2b"};
+		String[] keywordList = {};
 		
 		for(String kw:keywordList){
 			if(msgBody.contains(kw)){
