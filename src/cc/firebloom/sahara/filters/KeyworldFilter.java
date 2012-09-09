@@ -9,14 +9,20 @@ import android.content.res.Resources;
 import android.telephony.SmsMessage;
 
 public class KeyworldFilter {
+  private static final String PLACEHOLDER_REQ_LINK = "__REQ_LN__";
+  private static final String REGEX_LINK = "[\\d-]{5,13}|http://[\\w\\d.]+";
+  private static final String REGEX_ZHCH_PUNCT = "[“！？；。，…【】《》『』]+";
 	
-	static public boolean isSpam(SmsMessage sms, Context ctx){		
+	static public boolean isSpam(SmsMessage sms, Context ctx){
 	  Resources res = ctx.getResources();
 	  String[] keywords = res.getStringArray(R.array.init_keywords);
 	  
 		String msgBody = sms.getMessageBody().toString();
+		msgBody = msgBody.replaceAll("\\s+", "").replaceAll("\\p{Punct}", "").
+		            replaceAll(REGEX_ZHCH_PUNCT, "");
+		
 		for(String kw:keywords){
-		  Pattern p = Pattern.compile(kw);
+		  Pattern p = preprocessKeyword(kw);
 		  Matcher m = p.matcher(msgBody);
 			if(m.find()){
 				return true;
@@ -24,5 +30,9 @@ public class KeyworldFilter {
 		}
 		
 		return false;
+	}
+	
+	static private Pattern preprocessKeyword(String keyword){
+	  return Pattern.compile(keyword.replace(PLACEHOLDER_REQ_LINK, REGEX_LINK));
 	}
 }

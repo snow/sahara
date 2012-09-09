@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string-array name="init_keywords">
-    <item >^【沃冲浪】</item>
-    <item >沃商店[\\s\\S]*http://[\\w\\d]+</item>
-    <item >http://119.4.250.74/[\\w\\d]+</item>
-    <item >等您拿 http://[\\w\\d]+</item>
-    <item >等您拿 \\d+</item>
-    <item >大礼 http://[\\w\\d]+</item>
-    <item >大礼 \\d+</item>
-    <item >http://www.169ol.com/[\\w\\d]+</item>
-    <item >http://mstore.wo.com.cn/[\\w\\d]+</item>
-    <item >买既送</item>
-    <item >买即送</item>
-    <item >即日起</item>
-    <item >全场包邮</item>
+    <item >沃冲浪__REQ_LN__</item>
+    <item >沃商店__REQ_LN__</item>
+    <item >http://119.4.250.74/</item>
+    <item >等您拿__REQ_LN__</item>
+    <item >等你拿__REQ_LN__</item>
+    <item >大礼__REQ_LN__</item>
+    <item >http://www.169ol.com/</item>
+    <item >http://mstore.wo.com.cn/</item>
+    <item >买既送__REQ_LN__</item>
+    <item >买即送__REQ_LN__</item>
+    <item >买就送__REQ_LN__</item>
+    <item >即日起__REQ_LN__</item>
+    <item >全场包邮__REQ_LN__</item>
     <item >邀请你一起玩米聊</item>
-    <item >钜惠[\\s\\S]*\\d+</item>
-    <item >\\d.?\\d?折起</item>
-    <item >阔景大宅</item>
-    <item >尊享</item>
+    <item >钜惠__REQ_LN__</item>
+    <item >\\d|[一二三四物流七八九]折起__REQ_LN__</item>
+    <item >阔景大宅__REQ_LN__</item>
+    <item >尊享__REQ_LN__</item>
   </string-array>
     
 </resources>
