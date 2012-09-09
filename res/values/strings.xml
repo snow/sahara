@@ -3,7 +3,7 @@
   <string name="app_name">Sahara</string>
   <string name="hello_world">Hello world!</string>
   <string name="menu_settings">Settings</string>
-  <string name="title_activity_main">Dashboard</string>
+  <string name="title_activity_main">Sahara</string>
   <string name="welcome">Hello World! Sahara is an open source anti-sms app.</string>
   <string name="title_enable_keyword_filter">Keyword filter</string>
   <string name="pref_brief_title">Brief</string>

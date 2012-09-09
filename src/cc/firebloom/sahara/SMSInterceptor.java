@@ -53,7 +53,7 @@ public class SMSInterceptor extends BroadcastReceiver {
 
   private boolean isSpam(SmsMessage sms, Context ctx) {
     // return KeyworldFilter.isSpam(sms);
-    return SenderFilter.isSpam(sms, ctx) || KeyworldFilter.isSpam(sms);
+    return SenderFilter.isSpam(sms, ctx) || KeyworldFilter.isSpam(sms, ctx);
   }
 
   private void persistMessage(SmsMessage sms, Context ctx) {
