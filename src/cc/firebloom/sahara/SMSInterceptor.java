@@ -42,26 +42,33 @@ public class SMSInterceptor extends BroadcastReceiver {
         Log.d(TAG, strMessage);*/
         // --- dev ---
 
-        if (isSpam(sms, ctx)) {
+        String matchedRule =isSpam(sms, ctx);
+        if(null != matchedRule){
           //Log.d(TAG, "blocked!!");
           abortBroadcast();
-          persistMessage(sms, ctx);
+          persistMessage(sms, ctx, matchedRule);
         }
       }
     }
   }
 
-  private boolean isSpam(SmsMessage sms, Context ctx) {
+  private String isSpam(SmsMessage sms, Context ctx) {
     // return KeyworldFilter.isSpam(sms);
-    return SenderFilter.isSpam(sms, ctx) || KeyworldFilter.isSpam(sms, ctx);
+    String matchedRule = SenderFilter.isSpam(sms, ctx);
+    if(null == matchedRule){
+      matchedRule = KeyworldFilter.isSpam(sms, ctx);
+    }
+    
+    return matchedRule; 
   }
 
-  private void persistMessage(SmsMessage sms, Context ctx) {
+  private void persistMessage(SmsMessage sms, Context ctx, String matchedRule) {
     String yamlSkeleton = "---\n" + 
                           "from: %s\n" + 
                           "sent_at: %s\n" + 
                           //"received_at: %s\n" + 
-                          "text: %s\n";
+                          "text: %s\n" +
+                          "matched rule: %s\n";
     
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(sms.getTimestampMillis());
@@ -70,7 +77,8 @@ public class SMSInterceptor extends BroadcastReceiver {
     String msgYml = String.format(yamlSkeleton,
                                   sms.getOriginatingAddress(), 
                                   yamlFormat.format(calendar.getTime()),
-                                  sms.getDisplayMessageBody());
+                                  sms.getDisplayMessageBody(),
+                                  matchedRule);
     
     DateFormat filenameFormat = new SimpleDateFormat("yyyy-MM-dd_HHmm_ss_SSS");
     String filename = filenameFormat.format(calendar.getTime()) + "_" + 
