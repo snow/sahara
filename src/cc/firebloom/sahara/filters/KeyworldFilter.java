@@ -1,5 +1,8 @@
 package cc.firebloom.sahara.filters;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import cc.firebloom.sahara.R;
 import android.content.Context;
 import android.content.res.Resources;
@@ -13,7 +16,9 @@ public class KeyworldFilter {
 	  
 		String msgBody = sms.getMessageBody().toString();
 		for(String kw:keywords){
-			if(msgBody.matches(kw)){
+		  Pattern p = Pattern.compile(kw);
+		  Matcher m = p.matcher(msgBody);
+			if(m.find()){
 				return true;
 			}
 		}
