@@ -28,10 +28,15 @@ public class SMSInterceptor extends BroadcastReceiver {
 
     if (null != inf) {
       Object[] pdus = (Object[]) inf.get("pdus");
-
+      
+      boolean _isSpam = false;
+      SmsMessage[] messages = new SmsMessage[pdus.length];
+      String matchedRule = null;
+      
       for (int i = 0; i < pdus.length; i++) {
         SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
-
+        messages[i] = sms;
+        
         // --- dev ---
         /*String strMsgBody = sms.getMessageBody().toString();
         String strMsgSrc = sms.getOriginatingAddress();
@@ -41,13 +46,22 @@ public class SMSInterceptor extends BroadcastReceiver {
         Log.d(TAG, "--------------------");
         Log.d(TAG, strMessage);*/
         // --- dev ---
-
-        String matchedRule =isSpam(sms, ctx);
-        if(null != matchedRule){
-          //Log.d(TAG, "blocked!!");
-          abortBroadcast();
-          persistMessage(sms, ctx, matchedRule);
+        
+        if(!_isSpam){
+          matchedRule = isSpam(sms, ctx);        
+          if(null != matchedRule){
+            // call abortBroadcast() after all pdus being processed
+            _isSpam = true;
+          }
         }
+      }
+      
+      if(_isSpam){
+        for(SmsMessage sms:messages){
+          persistMessage(sms, ctx, matchedRule);
+        }        
+        
+        abortBroadcast();
       }
     }
   }
