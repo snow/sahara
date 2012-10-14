@@ -13,17 +13,16 @@ public class KeyworldFilter {
   private static final String REGEX_LINK = "[\\d-]{5,13}|http://[\\w\\d.]+";
   private static final String REGEX_ZHCH_PUNCT = "[“！？；。，…【】《》『』]+";
 	
-	static public String isSpam(SmsMessage sms, Context ctx){
-	  Resources res = ctx.getResources();
+	static public String isSpam(String text, Context context){
+	  Resources res = context.getResources();
 	  String[] keywords = res.getStringArray(R.array.init_keywords);
 	  
-		String msgBody = sms.getMessageBody().toString();
-		msgBody = msgBody.replaceAll("\\s+", "").replaceAll("\\p{Punct}", "").
+	  text = text.replaceAll("\\s+", "").replaceAll("\\p{Punct}", "").
 		            replaceAll(REGEX_ZHCH_PUNCT, "");
 		
 		for(String kw:keywords){
 		  Pattern p = preprocessKeyword(kw);
-		  Matcher m = p.matcher(msgBody);
+		  Matcher m = p.matcher(text);
 			if(m.find()){
 				return kw;
 			}

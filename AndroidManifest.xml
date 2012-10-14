@@ -7,6 +7,7 @@
         android:minSdkVersion="11"
         android:targetSdkVersion="15" />
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.RECEIVE_MMS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
@@ -23,10 +24,27 @@
             </intent-filter>
         </activity>
         
-        <receiver android:name=".SMSInterceptor">
+        <!-- <receiver android:name=".SMSInterceptor">
             <intent-filter android:priority="1">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
+        </receiver> -->
+        
+        <!-- <receiver android:name=".MMSInterceptor">
+				  <intent-filter android:priority="1">
+				    <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
+				    <data android:mimeType="application/vnd.wap.mms-message" />
+				  </intent-filter>
+				</receiver> -->
+				
+        <receiver android:name=".MessageReceiver">
+          <intent-filter android:priority="1">
+            <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+          </intent-filter>
+          <intent-filter android:priority="1">
+            <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
+            <data android:mimeType="application/vnd.wap.mms-message" />
+          </intent-filter>
         </receiver>
     </application>
 
