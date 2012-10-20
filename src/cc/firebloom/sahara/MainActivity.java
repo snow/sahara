@@ -20,8 +20,8 @@ public class MainActivity extends PreferenceActivity {
   }
   
   // separate these codes into a method
-  // just for apply `@TargetApi(11)`
-  // which seens to can't be applied in onCreate()
+  // just as ``@TargetApi(11)`` seens to can't be applied directly \
+  // above `getFragmentManager()` in onCreate()
   @TargetApi(11)
   protected void loadFragment() {
     getFragmentManager().beginTransaction()
