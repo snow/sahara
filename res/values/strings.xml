@@ -1,5 +1,4 @@
 <resources>
-
   <string name="app_name">Sahara</string>
   <string name="hello_world">Hello world!</string>
   <string name="menu_settings">Settings</string>
@@ -7,7 +6,7 @@
   <string name="welcome">Hello World! Sahara is an open source anti-sms app.</string>
   <string name="title_enable_keyword_filter">Keyword filter</string>
   <string name="pref_brief_title">Brief</string>
-  <string name="pref_brief_summary">Sahara is now filtering SMS that contains any keyword from a list maintaining by firebloom.cc</string>
+  <string name="pref_brief_summary">Sahara is now filtering SMS and MMS by sender number and content keyword.\nThe two black lists are now maintained by Snow.</string>
   <string name="pref_number_category">Number Filter (coming soon)</string>
   <string name="pref_add_conversation_title">Add SMS</string>
   <string name="pref_add_conversation_summary">block from the sender</string>
@@ -16,4 +15,6 @@
   <string name="pref_add_contact_summary">block from every number of this contact, regarding your further edit to her/him.</string>
   <string name="pref_manage_blacklist_title">Manage black list</string>
   <string name="pref_manage_blacklist_summary">view and remove</string>
+  <string name="pref_spam_list_category">Blocked messages (coming soon)</string>
+  <string name="pref_spam_list_title">View list</string>
 </resources>

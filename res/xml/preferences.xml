@@ -7,6 +7,15 @@
     android:selectable="false"/>
   
   <PreferenceCategory 
+     android:title="@string/pref_spam_list_category"
+     android:enabled="false" >
+     
+    <Preference 
+      android:title="@string/pref_spam_list_title" />
+     
+  </PreferenceCategory>
+  
+  <!-- <PreferenceCategory 
      android:title="@string/pref_number_category"
      android:enabled="false" >
     
@@ -32,6 +41,6 @@
       android:title="@string/pref_manage_blacklist_title"
       android:summary="@string/pref_manage_blacklist_summary" />
       
-  </PreferenceCategory>
+  </PreferenceCategory> -->
 
 </PreferenceScreen>
