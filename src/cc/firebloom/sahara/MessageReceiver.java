@@ -88,15 +88,17 @@ public class MessageReceiver extends BroadcastReceiver {
     // SMS
     // ---
     } else {
-      boolean _isSpam = false;
+      //boolean _isSpam = false;
       Object[] pdus = (Object[]) uinf.get("pdus");
       if(null != pdus){
         SmsMessage[] messages = new SmsMessage[pdus.length];
         String matchedRule = null;
+        StringBuffer msgBodyBuffer = new StringBuffer();
         
         for (int i = 0; i < pdus.length; i++) {
           SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
           messages[i] = sms;
+          msgBodyBuffer.append(sms.getMessageBody());
           
           // --- dev ---
           /*String strMsgBody = sms.getMessageBody().toString();
@@ -108,21 +110,24 @@ public class MessageReceiver extends BroadcastReceiver {
           Log.d(TAG, strMessage);*/
           // --- dev ---
           
-          if(!_isSpam){
-            matchedRule = isSpam(sms.getOriginatingAddress(), 
-                                 sms.getMessageBody().toString(), 
-                                 context);        
-            if(null != matchedRule){
-              // call abortBroadcast() after all pdus being processed
-              _isSpam = true;
-            }
-          }
+//          if(!_isSpam){
+//            matchedRule = isSpam(sms.getOriginatingAddress(), 
+//                                 sms.getMessageBody().toString(), 
+//                                 context);        
+//            if(null != matchedRule){
+//              // call abortBroadcast() after all pdus being processed
+//              _isSpam = true;
+//            }
+//          }
         }
         
-        if(_isSpam){
-          for(SmsMessage sms:messages){
-            persistMessage(sms, matchedRule, context);
-          }        
+        String from = messages[0].getOriginatingAddress();
+        String text = msgBodyBuffer.toString();
+        matchedRule = isSpam(from, text, context);  
+        
+        if(null != matchedRule){
+          Long timestamp = messages[0].getTimestampMillis();
+          persistMessage(from, text, timestamp, matchedRule, context);       
           
           abortBroadcast();
         }
@@ -139,13 +144,13 @@ public class MessageReceiver extends BroadcastReceiver {
     return matchedRule; 
   } // isSpam
   
-  private void persistMessage(SmsMessage sms, String matchedRule, Context context) {
-    persistMessage(sms.getOriginatingAddress(), 
-                   sms.getDisplayMessageBody(), 
-                   sms.getTimestampMillis(), 
-                   matchedRule, 
-                   context);
-  }
+//  private void persistMessage(SmsMessage sms, String matchedRule, Context context) {
+//    persistMessage(sms.getOriginatingAddress(), 
+//                   sms.getDisplayMessageBody(), 
+//                   sms.getTimestampMillis(), 
+//                   matchedRule, 
+//                   context);
+//  }
 
   private void persistMessage(String from, String text, Long timestamp, String matchedRule, Context context) {
 //    String yamlSkeleton = "---\n" + 
