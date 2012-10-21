@@ -13,6 +13,7 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,9 @@ public class SpamArrayAdapter extends ArrayAdapter<String> {
     
     TextView titleV = (TextView)rowView.findViewById(android.R.id.text1);
     TextView textV = (TextView)rowView.findViewById(android.R.id.text2);
+    //textV.setMaxLines(2);
+    textV.setSingleLine();
+    textV.setEllipsize(TextUtils.TruncateAt.END);
     
     String filename = this.filenames.get(position);
     File file = this.name2file.get(filename);
