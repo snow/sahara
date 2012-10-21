@@ -7,6 +7,8 @@
     <item >等您拿__REQ_LN__</item>
     <item >等你拿__REQ_LN__</item>
     <item >大礼__REQ_LN__</item>
+    <item >大奖__REQ_LN__</item>
+    <item >好礼__REQ_LN__</item>
     <item >http://www.169ol.com/</item>
     <item >http://mstore.wo.com.cn/</item>
     <item >买既送__REQ_LN__</item>
@@ -19,6 +21,9 @@
     <item >[\\d\\.一二三四五六七八九]+折起__REQ_LN__</item>
     <item >阔景大宅__REQ_LN__</item>
     <item >尊享__REQ_LN__</item>
+    <item >金铺__REQ_LN__</item>
+    <item >旺铺__REQ_LN__</item>
+    <item >户型__REQ_LN__</item>
   </string-array>
     
 </resources>
