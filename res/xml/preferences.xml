@@ -5,15 +5,11 @@
     android:title="@string/pref_brief_title"
     android:summary="@string/pref_brief_summary" 
     android:selectable="false"/>
-  
-  <PreferenceCategory 
-     android:title="@string/pref_spam_list_category"
-     android:enabled="false" >
      
-    <Preference 
-      android:title="@string/pref_spam_list_title" />
-     
-  </PreferenceCategory>
+  <Preference android:title="@string/pref_spam_list_title" >
+    <intent android:targetClass="cc.firebloom.sahara.SpamListActivity"
+            android:targetPackage="cc.firebloom.sahara" />
+  </Preference>
   
   <!-- <PreferenceCategory 
      android:title="@string/pref_number_category"
