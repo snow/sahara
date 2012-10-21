@@ -8,13 +8,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.damazio.notifier.event.receivers.mms.EncodedStringValue;
 import org.damazio.notifier.event.receivers.mms.PduHeaders;
 import org.damazio.notifier.event.receivers.mms.PduParser;
-
-import cc.firebloom.sahara.filters.KeyworldFilter;
-import cc.firebloom.sahara.filters.SenderFilter;
+import org.yaml.snakeyaml.Yaml;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import cc.firebloom.sahara.filters.KeyworldFilter;
+import cc.firebloom.sahara.filters.SenderFilter;
 
 public class MessageReceiver extends BroadcastReceiver {
   private static final String TAG = "MessageReceiver";
@@ -146,22 +148,31 @@ public class MessageReceiver extends BroadcastReceiver {
   }
 
   private void persistMessage(String from, String text, Long timestamp, String matchedRule, Context context) {
-    String yamlSkeleton = "---\n" + 
-                          "from: %s\n" + 
-                          "sent_at: %s\n" + 
-                          //"received_at: %s\n" + 
-                          "text: %s\n" +
-                          "matched rule: %s\n";
+//    String yamlSkeleton = "---\n" + 
+//                          "from: %s\n" + 
+//                          "sent_at: %s\n" + 
+//                          //"received_at: %s\n" + 
+//                          "text: %s\n" +
+//                          "matched rule: %s\n";
     
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(timestamp);
     DateFormat yamlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z"); 
     
-    String msgYml = String.format(yamlSkeleton,
-                                  from, 
-                                  yamlFormat.format(calendar.getTime()),
-                                  text,
-                                  matchedRule);
+//    String msgYml = String.format(yamlSkeleton,
+//                                  from, 
+//                                  yamlFormat.format(calendar.getTime()),
+//                                  text,
+//                                  matchedRule);
+    
+    Map<String, String> record = new HashMap<String, String>();
+    record.put("from", from);
+    record.put("sent_at", yamlFormat.format(calendar.getTime()));
+    record.put("text", text);
+    record.put("matched_rule", matchedRule);
+    
+    Yaml yaml = new Yaml();
+    String msgYml = yaml.dump(record);
     
     DateFormat filenameFormat = new SimpleDateFormat("yyyy-MM-dd_HHmm_ss_SSS");
     String filename = String.format("%s_%s.yml", 
@@ -185,14 +196,10 @@ public class MessageReceiver extends BroadcastReceiver {
       bakDir = context.getDir(MSG_BAK_DIR, Context.MODE_PRIVATE);
     }
     
-    saveStringToPath(msgYml, bakDir, filename);
-  } // persistMessage
-  
-  private void saveStringToPath(String text, File dir, String name){
-    //Log.d(TAG, "saving to: " + dir.getPath());
+//    saveStringToPath(msgYml, bakDir, filename);
     try {
-      FileOutputStream fos = new FileOutputStream(new File(dir, name));
-      fos.write(text.getBytes());
+      FileOutputStream fos = new FileOutputStream(new File(bakDir, filename));
+      fos.write(msgYml.getBytes());
       fos.close();
     } catch (FileNotFoundException e) {
       // TODO Auto-generated catch block
@@ -201,6 +208,21 @@ public class MessageReceiver extends BroadcastReceiver {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-  } // saveStringToPath
+  } // persistMessage
+  
+//  private void saveStringToPath(String text, File dir, String name){
+//    //Log.d(TAG, "saving to: " + dir.getPath());
+//    try {
+//      FileOutputStream fos = new FileOutputStream(new File(dir, name));
+//      fos.write(text.getBytes());
+//      fos.close();
+//    } catch (FileNotFoundException e) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    } catch (IOException e) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    }
+//  } // saveStringToPath
   
 }
