@@ -28,8 +28,6 @@ import cc.firebloom.sahara.filters.SenderFilter;
 
 public class MessageReceiver extends BroadcastReceiver {
   private static final String TAG = "MessageReceiver";
-  private static final String MSG_BAK_DIR = "msg_bak";
-  private static final String EXT_STORAGE_DIR = "cc.firebloom.sahara";
   
   private static final String MMS_DATA_TYPE = "application/vnd.wap.mms-message";
 
@@ -171,10 +169,10 @@ public class MessageReceiver extends BroadcastReceiver {
 //                                  matchedRule);
     
     Map<String, String> record = new HashMap<String, String>();
-    record.put("from", from);
-    record.put("sent_at", yamlFormat.format(calendar.getTime()));
-    record.put("text", text);
-    record.put("matched_rule", matchedRule);
+    record.put(Sahara.Message.FROM, from);
+    record.put(Sahara.Message.SENT_AT, yamlFormat.format(calendar.getTime()));
+    record.put(Sahara.Message.TEXT, text);
+    record.put(Sahara.Message.MATCHED_RULE, matchedRule);
     
     Yaml yaml = new Yaml();
     String msgYml = yaml.dump(record);
@@ -187,18 +185,14 @@ public class MessageReceiver extends BroadcastReceiver {
     File bakDir = null;
     if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
         // We can read and write the media
-      File extStorageDir = new File(Environment.getExternalStorageDirectory().getPath() + 
-                                      "/" + EXT_STORAGE_DIR);
-      if(extStorageDir.exists() || extStorageDir.mkdir()) {
-        File extBakDir = new File(extStorageDir.getPath() + "/" + MSG_BAK_DIR);
-        if(extBakDir.exists() || extBakDir.mkdir()){
-          bakDir = extBakDir;
-        }
+      File extStorageDir = new File(Sahara.Message.STORE_PATH);
+      if(extStorageDir.exists() || extStorageDir.mkdirs()) {
+        bakDir = extStorageDir;
       } 
     } 
     
     if(null == bakDir){
-      bakDir = context.getDir(MSG_BAK_DIR, Context.MODE_PRIVATE);
+      bakDir = context.getDir(Sahara.Message.STORE_DIR, Context.MODE_PRIVATE);
     }
     
 //    saveStringToPath(msgYml, bakDir, filename);

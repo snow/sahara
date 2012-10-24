@@ -29,10 +29,10 @@ public class SpamDetailActivity extends Activity {
         TextView textV = (TextView)findViewById(R.id.text);
         
         Intent intent = getIntent();
-        fromV.setText(intent.getStringExtra("from"));
-        timeV.setText(intent.getStringExtra("sent_at"));
-        textV.setText(intent.getStringExtra("text"));
-        matchedRuleV.setText(intent.getStringExtra("matched_rule"));
+        fromV.setText(intent.getStringExtra(Sahara.Message.FROM));
+        timeV.setText(intent.getStringExtra(Sahara.Message.SENT_AT));
+        textV.setText(intent.getStringExtra(Sahara.Message.TEXT));
+        matchedRuleV.setText(intent.getStringExtra(Sahara.Message.MATCHED_RULE));
     }
     
     @TargetApi(11)

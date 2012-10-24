@@ -34,8 +34,7 @@ public class SpamListActivity extends ListActivity {
     }
 
     if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-      File extStorageDir = new File(Environment.getExternalStorageDirectory()
-          .getPath() + "/cc.firebloom.sahara/msg_bak");
+      File extStorageDir = new File(Sahara.Message.STORE_PATH);
       if (extStorageDir.exists()) {
         List<String> filenames = new ArrayList<String>();
         Map<String, File> name2file = new HashMap<String, File>();
@@ -94,10 +93,10 @@ public class SpamListActivity extends ListActivity {
   protected void onListItemClick(ListView l, View v, int position, long id) {
     Map<String, String> record = (Map<String, String>) getListAdapter().getItem(position);
     Intent intent = new Intent(this, SpamDetailActivity.class);
-    intent.putExtra("from", record.get("from"));
-    intent.putExtra("sent_at", record.get("sent_at"));
-    intent.putExtra("text", record.get("text"));
-    intent.putExtra("matched_rule", record.get("matched_rule"));
+    intent.putExtra(Sahara.Message.FROM, record.get(Sahara.Message.FROM));
+    intent.putExtra(Sahara.Message.SENT_AT, record.get(Sahara.Message.SENT_AT));
+    intent.putExtra(Sahara.Message.TEXT, record.get(Sahara.Message.TEXT));
+    intent.putExtra(Sahara.Message.MATCHED_RULE, record.get(Sahara.Message.MATCHED_RULE));
     
     startActivity(intent);
   }
