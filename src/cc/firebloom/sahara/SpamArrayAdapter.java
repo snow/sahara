@@ -3,14 +3,8 @@
  */
 package cc.firebloom.sahara;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
-
-import org.yaml.snakeyaml.Yaml;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -24,18 +18,12 @@ import android.widget.TextView;
  * @author snowhs
  *
  */
-public class SpamArrayAdapter extends ArrayAdapter<String> {
+public class SpamArrayAdapter extends ArrayAdapter<Map<String, Object>> {
   private final Context context;
-  private final List<String> filenames;
-  private final Map<String, File> name2file;
-  private final Yaml yaml;
 
-  public SpamArrayAdapter(Context context, List<String> filenames, Map<String, File> name2file) {
-    super(context, android.R.layout.two_line_list_item, filenames);
+  public SpamArrayAdapter(Context context, List<Map<String, Object>> records) {
+    super(context, android.R.layout.two_line_list_item, records);
     this.context = context;
-    this.filenames = filenames;
-    this.name2file = name2file;
-    this.yaml = new Yaml();
   }
   
   @Override
@@ -50,20 +38,10 @@ public class SpamArrayAdapter extends ArrayAdapter<String> {
     textV.setSingleLine();
     textV.setEllipsize(TextUtils.TruncateAt.END);
     
-    String filename = this.filenames.get(position);
-    File file = this.name2file.get(filename);
+    Map<String, Object> record = getItem(position);
     
-    InputStream is;
-    try {
-      is = new FileInputStream(file);
-      Map<String, Object> record = (Map<String, Object>) this.yaml.load(is);
-      
-      titleV.setText(record.get("from").toString());
-      textV.setText(record.get("text").toString());
-    } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    titleV.setText(record.get("from").toString());
+    textV.setText(record.get("text").toString());
     
     return rowView;
   }

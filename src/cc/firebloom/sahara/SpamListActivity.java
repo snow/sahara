@@ -1,11 +1,16 @@
 package cc.firebloom.sahara;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.yaml.snakeyaml.Yaml;
 
 import android.annotation.TargetApi;
 import android.app.ListActivity;
@@ -13,8 +18,10 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.Toast;
 
 public class SpamListActivity extends ListActivity {
 
@@ -37,8 +44,25 @@ public class SpamListActivity extends ListActivity {
           filenames.add(filename);
           name2file.put(filename, file);
         }
+        
         Collections.sort(filenames, Collections.reverseOrder());
-        SpamArrayAdapter adapter = new SpamArrayAdapter(this, filenames, name2file);
+        
+        List<Map<String, Object>> records = new ArrayList<Map<String, Object>>();
+        Yaml yaml = new Yaml();
+        for(String filename:filenames) {
+          File file = name2file.get(filename);
+          InputStream is;
+          try {
+            is = new FileInputStream(file);
+            Map<String, Object> record = (Map<String, Object>) yaml.load(is);
+            records.add(record);
+          } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+        }
+        
+        SpamArrayAdapter adapter = new SpamArrayAdapter(this, records);
         setListAdapter(adapter);
       }
     }
@@ -59,10 +83,17 @@ public class SpamListActivity extends ListActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
     case android.R.id.home:
-      NavUtils.navigateUpFromSameTask(this);
+      //NavUtils.navigateUpFromSameTask(this);
+      finish();
       return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+  
+  @Override
+  protected void onListItemClick(ListView l, View v, int position, long id) {
+    String item = (String) getListAdapter().getItem(position);
+    Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
   }
 
 }
