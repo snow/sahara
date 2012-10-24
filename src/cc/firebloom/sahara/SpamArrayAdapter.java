@@ -3,11 +3,7 @@
  */
 package cc.firebloom.sahara;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,32 +40,15 @@ public class SpamArrayAdapter extends ArrayAdapter<Map<String, String>> {
     //textV.setEllipsize(TextUtils.TruncateAt.END);
     
     Map<String, String> record = getItem(position);
-    
+
     fromV.setText(record.get(Sahara.Message.FROM));
-    //timeV.setText(record.get(Sahara.Message.SENT_AT));
-    textV.setText(record.get(Sahara.Message.TEXT));
-    
-    DateFormat yamlFormat = new SimpleDateFormat(Sahara.Yaml.DateTimeFormat);
     try {
-      Date sent_at = yamlFormat.parse(record.get(Sahara.Message.SENT_AT));
-      Calendar cal = Calendar.getInstance();
-      cal.set(Calendar.HOUR_OF_DAY, 0);
-      cal.set(Calendar.MINUTE, 0);
-      cal.set(Calendar.SECOND, 0);
-      cal.set(Calendar.MILLISECOND, 0);
-      Date begin_of_day = cal.getTime();
-      
-      DateFormat shortDateFormt;
-      if(sent_at.before(begin_of_day)){
-        shortDateFormt = new SimpleDateFormat("MM-dd");
-      } else {
-        shortDateFormt = new SimpleDateFormat("HH:mm");
-      }
-      timeV.setText(shortDateFormt.format(sent_at));
+      timeV.setText(Sahara.humanizeYamlDate(record.get(Sahara.Message.SENT_AT)));
     } catch (ParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    textV.setText(record.get(Sahara.Message.TEXT));
     
     return rowV;
   }
