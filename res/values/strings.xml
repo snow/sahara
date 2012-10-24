@@ -4,21 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Sahara</string>
-    <string name="welcome">Hello World! Sahara is an open source anti-sms app.</string>
-    <string name="title_enable_keyword_filter">Keyword filter</string>
     <string name="pref_brief_title">Brief</string>
-    <string name="pref_brief_summary">Sahara is now filtering SMS and MMS by sender number and content keyword.\nThe two black lists are now maintained by Snow.</string>
-    <string name="pref_number_category">Number Filter (coming soon)</string>
-    <string name="pref_add_conversation_title">Add SMS</string>
-    <string name="pref_add_conversation_summary">block from the sender</string>
-    <string name="pref_contact_category">Contact Filter (coming soon)</string>
-    <string name="pref_add_contact_title">Add contact</string>
-    <string name="pref_add_contact_summary">block from every number of this contact, regarding your further edit to her/him.</string>
-    <string name="pref_manage_blacklist_title">Manage black list</string>
-    <string name="pref_manage_blacklist_summary">view and remove</string>
-    <string name="pref_spam_list_category">Blocked messages (coming soon)</string>
-    <string name="pref_spam_list_title">Spam list</string>
-    <string name="title_activity_spam_list">Spam List</string>
-    <string name="title_activity_spam_detail">Spam Detail</string>
+    <string name="pref_brief_summary">Sahara filters SMS and MMS by sender number and content keyword.\nBlack lists are maintained by Snow.</string>
+    <string name="pref_spam_list_title">Blocked messages</string>
+    <string name="title_activity_spam_list">Blocked messages</string>
+    <string name="title_activity_spam_detail">Message</string>
 
 </resources>
