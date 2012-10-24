@@ -18,10 +18,10 @@ import android.widget.TextView;
  * @author snowhs
  *
  */
-public class SpamArrayAdapter extends ArrayAdapter<Map<String, Object>> {
+public class SpamArrayAdapter extends ArrayAdapter<Map<String, String>> {
   private final Context context;
 
-  public SpamArrayAdapter(Context context, List<Map<String, Object>> records) {
+  public SpamArrayAdapter(Context context, List<Map<String, String>> records) {
     super(context, android.R.layout.two_line_list_item, records);
     this.context = context;
   }
@@ -38,10 +38,10 @@ public class SpamArrayAdapter extends ArrayAdapter<Map<String, Object>> {
     textV.setSingleLine();
     textV.setEllipsize(TextUtils.TruncateAt.END);
     
-    Map<String, Object> record = getItem(position);
+    Map<String, String> record = getItem(position);
     
-    titleV.setText(record.get("from").toString());
-    textV.setText(record.get("text").toString());
+    titleV.setText(record.get("from"));
+    textV.setText(record.get("text"));
     
     return rowView;
   }

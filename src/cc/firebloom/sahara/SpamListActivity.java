@@ -14,6 +14,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import android.annotation.TargetApi;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -21,7 +22,6 @@ import android.os.Environment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class SpamListActivity extends ListActivity {
 
@@ -47,14 +47,14 @@ public class SpamListActivity extends ListActivity {
         
         Collections.sort(filenames, Collections.reverseOrder());
         
-        List<Map<String, Object>> records = new ArrayList<Map<String, Object>>();
+        List<Map<String, String>> records = new ArrayList<Map<String, String>>();
         Yaml yaml = new Yaml();
         for(String filename:filenames) {
           File file = name2file.get(filename);
           InputStream is;
           try {
             is = new FileInputStream(file);
-            Map<String, Object> record = (Map<String, Object>) yaml.load(is);
+            Map<String, String> record = (Map<String, String>) yaml.load(is);
             records.add(record);
           } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
@@ -92,8 +92,14 @@ public class SpamListActivity extends ListActivity {
   
   @Override
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    String item = (String) getListAdapter().getItem(position);
-    Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
+    Map<String, String> record = (Map<String, String>) getListAdapter().getItem(position);
+    Intent intent = new Intent(this, SpamDetailActivity.class);
+    intent.putExtra("from", record.get("from"));
+    intent.putExtra("sent_at", record.get("sent_at"));
+    intent.putExtra("text", record.get("text"));
+    intent.putExtra("matched_rule", record.get("matched_rule"));
+    
+    startActivity(intent);
   }
 
 }

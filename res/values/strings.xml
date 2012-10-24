@@ -19,5 +19,6 @@
     <string name="pref_spam_list_category">Blocked messages (coming soon)</string>
     <string name="pref_spam_list_title">Spam list</string>
     <string name="title_activity_spam_list">Spam List</string>
+    <string name="title_activity_spam_detail">Spam Detail</string>
 
 </resources>

@@ -61,6 +61,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="cc.firebloom.sahara.MainActivity" />
         </activity>
+        <activity
+            android:name=".SpamDetailActivity"
+            android:label="@string/title_activity_spam_detail" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="cc.firebloom.sahara.SpamListActivity" />
+        </activity>
     </application>
 
 </manifest>
