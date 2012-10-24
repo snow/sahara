@@ -28,4 +28,8 @@ public final class Sahara {
         PACKAGE, 
         STORE_DIR);
   }
+  
+  public static final class Yaml {
+    public static final String DateTimeFormat = "yyyy-MM-dd HH:mm:ss.SSS Z";
+  }
 }

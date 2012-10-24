@@ -160,7 +160,7 @@ public class MessageReceiver extends BroadcastReceiver {
     
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(timestamp);
-    DateFormat yamlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z"); 
+    DateFormat yamlFormat = new SimpleDateFormat(Sahara.Yaml.DateTimeFormat); 
     
 //    String msgYml = String.format(yamlSkeleton,
 //                                  from, 
