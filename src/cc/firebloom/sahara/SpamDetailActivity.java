@@ -1,5 +1,7 @@
 package cc.firebloom.sahara;
 
+import java.text.ParseException;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -29,10 +31,15 @@ public class SpamDetailActivity extends Activity {
         TextView textV = (TextView)findViewById(R.id.text);
         
         Intent intent = getIntent();
-        fromV.setText(intent.getStringExtra(Sahara.Message.FROM));
-        timeV.setText(intent.getStringExtra(Sahara.Message.SENT_AT));
+        fromV.setText("from: "+ intent.getStringExtra(Sahara.Message.FROM));
+        try {
+          timeV.setText(Sahara.humanizeYamlDate(intent.getStringExtra(Sahara.Message.SENT_AT), false));
+        } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
         textV.setText(intent.getStringExtra(Sahara.Message.TEXT));
-        matchedRuleV.setText(intent.getStringExtra(Sahara.Message.MATCHED_RULE));
+        matchedRuleV.setText("caught by: " + intent.getStringExtra(Sahara.Message.MATCHED_RULE));
     }
     
     @TargetApi(11)
