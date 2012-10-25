@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,8 +20,11 @@ import org.yaml.snakeyaml.Yaml;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import cc.firebloom.sahara.filters.KeyworldFilter;
@@ -28,8 +32,9 @@ import cc.firebloom.sahara.filters.SenderFilter;
 
 public class MessageReceiver extends BroadcastReceiver {
   private static final String TAG = "MessageReceiver";
-  
   private static final String MMS_DATA_TYPE = "application/vnd.wap.mms-message";
+  
+  protected static ArrayList<String> contactNumbers;
 
   @Override
   public void onReceive(Context context, Intent intent) {
@@ -133,7 +138,18 @@ public class MessageReceiver extends BroadcastReceiver {
     }
   } // onReceive
   
-  private String isSpam(String from, String text, Context context) {
+  protected static String isSpam(String from, String text, Context context) {
+    if (null == contactNumbers) {
+      loadContacts(context);
+    }
+    
+    from = from.replaceAll("[ +_-]", "");
+    for(String contactNumber:contactNumbers) {
+      if (from.endsWith(contactNumber)) {
+        return null;
+      }
+    }
+    
     String matchedRule = SenderFilter.isSpam(from, context);
     if(null == matchedRule){
       matchedRule = KeyworldFilter.isSpam(text, context);
@@ -141,6 +157,21 @@ public class MessageReceiver extends BroadcastReceiver {
     
     return matchedRule; 
   } // isSpam
+  
+  protected static void loadContacts(Context context) {
+    Uri contactDataUri = Phone.CONTENT_URI;
+    
+    Cursor c = context.getContentResolver().query(contactDataUri, 
+        new String[] {Phone.NUMBER}, 
+        Phone.MIMETYPE + " = ?", 
+        new String[] { Phone.CONTENT_ITEM_TYPE }, null);
+    
+    contactNumbers = new ArrayList<String>();
+    while (c.moveToNext()) {
+      String contactNumber = c.getString(0).replaceAll("[ +_-]", "");
+      contactNumbers.add(contactNumber);
+    }
+  }
   
 //  private void persistMessage(SmsMessage sms, String matchedRule, Context context) {
 //    persistMessage(sms.getOriginatingAddress(), 
