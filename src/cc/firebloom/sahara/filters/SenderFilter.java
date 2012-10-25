@@ -5,7 +5,6 @@ package cc.firebloom.sahara.filters;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.telephony.SmsMessage;
 import cc.firebloom.sahara.R;
 
 /**
