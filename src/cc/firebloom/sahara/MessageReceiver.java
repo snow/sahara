@@ -27,7 +27,7 @@ import android.os.Environment;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import cc.firebloom.sahara.filters.KeyworldFilter;
+import cc.firebloom.sahara.filters.KeywordFilter;
 import cc.firebloom.sahara.filters.SenderFilter;
 
 public class MessageReceiver extends BroadcastReceiver {
@@ -152,7 +152,7 @@ public class MessageReceiver extends BroadcastReceiver {
     
     String matchedRule = SenderFilter.isSpam(from, context);
     if(null == matchedRule){
-      matchedRule = KeyworldFilter.isSpam(text, context);
+      matchedRule = KeywordFilter.isSpam(text, context);
     }
     
     return matchedRule; 
