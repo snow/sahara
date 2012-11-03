@@ -9,5 +9,6 @@
     <string name="pref_spam_list_title">Blocked messages</string>
     <string name="title_activity_spam_list">Blocked messages</string>
     <string name="title_activity_spam_detail">Message</string>
+    <string name="title_activity_sender_black_list">Sender Black List</string>
 
 </resources>

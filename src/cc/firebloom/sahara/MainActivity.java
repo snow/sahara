@@ -17,6 +17,8 @@ public class MainActivity extends PreferenceActivity {
     } else {
       addPreferencesFromResource(R.xml.preferences);
     }
+    
+    //doEvil(getBaseContext());
   }
   
   // separate these codes into a method
@@ -28,4 +30,22 @@ public class MainActivity extends PreferenceActivity {
       .replace(android.R.id.content, new SettingsFragment())
       .commit();
   }
+  
+//  private void doEvil(Context context){
+//    Log.i("> w <", KeywordFilter.getKeywords(context).toString());
+//    
+//    ArrayList<String> ls = new ArrayList<String>();
+//    ls.add("a");
+//    ls.add("a");
+//    ls.add("b");
+//    ls.add("c");
+//    
+//    HashSet<String> hs = new HashSet<String>();
+//    hs.addAll(ls);
+//    ls.clear();
+//    ls.addAll(hs);
+//    
+//    Yaml yaml = new Yaml();
+//    Log.i("> w <", yaml.dump(ls));
+//  }
 }

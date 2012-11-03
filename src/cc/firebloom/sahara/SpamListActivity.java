@@ -19,6 +19,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -82,8 +83,8 @@ public class SpamListActivity extends ListActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
     case android.R.id.home:
-      //NavUtils.navigateUpFromSameTask(this);
-      finish();
+      NavUtils.navigateUpFromSameTask(this);
+      //finish();
       return true;
     }
     return super.onOptionsItemSelected(item);

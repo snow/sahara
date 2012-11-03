@@ -28,7 +28,7 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import cc.firebloom.sahara.filters.KeywordFilter;
-import cc.firebloom.sahara.filters.SenderFilter;
+import cc.firebloom.sahara.sender.SenderFilter;
 
 public class MessageReceiver extends BroadcastReceiver {
   private static final String TAG = "MessageReceiver";
