@@ -3,12 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
+    <EditText
+        android:id="@+id/new_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world"
-        tools:context=".SenderBlackListActivity" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/add_new_number"
+        android:layout_alignBottom="@+id/add_new_number"
+        android:ems="10"
+        android:inputType="phone" >
+    </EditText>
+
+    <Button
+        android:id="@+id/add_new_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="+" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/new_number"
+        android:orientation="vertical" >
+        
+        <com.wagado.widget.StickySectionListView
+	        android:id="@android:id/list"
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent" />
+    </LinearLayout>
 
 </RelativeLayout>

@@ -1,48 +1,116 @@
 package cc.firebloom.sahara.sender;
 
-import cc.firebloom.sahara.R;
-import cc.firebloom.sahara.R.layout;
-import cc.firebloom.sahara.R.menu;
-import android.os.Bundle;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.annotation.TargetApi;
+import android.app.ListActivity;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.annotation.TargetApi;
-import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import cc.firebloom.sahara.R;
 
-public class BlackListActivity extends Activity {
+import com.wagado.widget.StickySectionListView;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sender_black_list);
-        
-        if (VERSION_CODES.HONEYCOMB <= VERSION.SDK_INT){
-          configActionBar();
-        }
-    }
+public class BlackListActivity extends ListActivity {
+  
+  private StickySectionListView mListView;
+  protected ArrayList<String> mCustomList;
+  protected ArrayList<String> mPublicList;
+  
+  protected Button mAddButton;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_sender_black_list, menu);
-        return true;
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_sender_black_list);
+
+    if (VERSION_CODES.HONEYCOMB <= VERSION.SDK_INT) {
+      configActionBar();
     }
     
-    @TargetApi(11)
-    protected void configActionBar() {
-      getActionBar().setDisplayHomeAsUpEnabled(true);
+    Sender sender = new Sender(this);
+    mCustomList = sender.customList();
+    try {
+      mPublicList = sender.publicList();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
     
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-      switch (item.getItemId()) {
-      case android.R.id.home:
-        NavUtils.navigateUpFromSameTask(this);
-        //finish();
-        return true;
-      }
-      return super.onOptionsItemSelected(item);
+    List<String> list = new ArrayList<String>();
+    list.addAll(mCustomList);
+    list.addAll(mPublicList);
+    ArrayAdapter<String> baseAdapter = new ArrayAdapter<String>(this, 
+        android.R.layout.simple_list_item_1, android.R.id.text1, list);
+    
+    mListView = (StickySectionListView) getListView();
+    setListAdapter(new BlackListAdapter(baseAdapter, getBaseContext()));
+    mListView.setFastScrollEnabled(true);
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.activity_sender_black_list, menu);
+    return true;
+  }
+
+  @TargetApi(11)
+  protected void configActionBar() {
+    getActionBar().setDisplayHomeAsUpEnabled(true);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+    case android.R.id.home:
+      NavUtils.navigateUpFromSameTask(this);
+      // finish();
+      return true;
     }
+    return super.onOptionsItemSelected(item);
+  }
+  
+//  protected SectionListAdapter sectionListAdapter() {
+//    List<String> list = new ArrayList<String>();
+//    list.addAll(mCustomList);
+//    list.addAll(mPublicList);
+//    ArrayAdapter<String> baseAdapter = new ArrayAdapter<String>(this, 
+//        android.R.layout.simple_list_item_1, android.R.id.text1, list);
+//    
+//    return new SectionListAdapter(baseAdapter, sectionDetector()) {
+//      protected final int mHeaderLayoutId = android.R.layout.preference_category;
+//      protected final int mTitleTextViewId = android.R.id.title;
+//      
+//      @Override
+//      protected View getSectionView(Object header, View convertView, ViewGroup parent) {
+//        View v;
+//        if (convertView != null) {
+//          v = convertView;
+//        } else {
+//          v = View.inflate(getBaseContext(), mHeaderLayoutId, null);
+//        }
+//        ((TextView) v.findViewById(mTitleTextViewId)).setText(header.toString());
+//
+//        return v;
+//      }
+//      
+//      @Override
+//      protected Object getSectionHeader(Object firstItem, Object secondItem) {
+//        if (getSectionDetector() != null) {
+//          return getSectionDetector().detectSection(firstItem, secondItem);
+//        } else {
+//          return null;
+//        }
+//      }
+//    };
+//  }
+  
+  
 }
