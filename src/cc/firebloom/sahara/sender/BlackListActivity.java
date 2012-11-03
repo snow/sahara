@@ -1,28 +1,24 @@
 package cc.firebloom.sahara.sender;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
 
 import android.annotation.TargetApi;
-import android.app.ListActivity;
+import android.app.Activity;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import cc.firebloom.sahara.R;
 
-import com.wagado.widget.StickySectionListView;
-
-public class BlackListActivity extends ListActivity {
+public class BlackListActivity extends Activity {
   
-  private StickySectionListView mListView;
-  protected ArrayList<String> mCustomList;
-  protected ArrayList<String> mPublicList;
+  private ListView mListView;
+//  protected ArrayList<String> mCustomList;
+//  protected ArrayList<String> mPublicList;
   
   protected Button mAddButton;
 
@@ -35,23 +31,23 @@ public class BlackListActivity extends ListActivity {
       configActionBar();
     }
     
-    Sender sender = new Sender(this);
-    mCustomList = sender.customList();
-    try {
-      mPublicList = sender.publicList();
-    } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+//    Sender sender = new Sender(this);
+//    mCustomList = sender.customList();
+//    try {
+//      mPublicList = sender.publicList();
+//    } catch (IOException e) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    }
     
-    List<String> list = new ArrayList<String>();
-    list.addAll(mCustomList);
-    list.addAll(mPublicList);
-    ArrayAdapter<String> baseAdapter = new ArrayAdapter<String>(this, 
-        android.R.layout.simple_list_item_1, android.R.id.text1, list);
+//    List<String> list = new ArrayList<String>();
+//    list.addAll(mCustomList);
+//    list.addAll(mPublicList);
+//    ArrayAdapter<String> baseAdapter = new ArrayAdapter<String>(this, 
+//        android.R.layout.simple_list_item_1, android.R.id.text1, list);
     
-    mListView = (StickySectionListView) getListView();
-    setListAdapter(new BlackListAdapter(baseAdapter, getBaseContext()));
+    mListView = (StickyListHeadersListView) findViewById(android.R.id.list);
+    mListView.setAdapter(new BlackListAdapter(getBaseContext()));
     mListView.setFastScrollEnabled(true);
   }
 

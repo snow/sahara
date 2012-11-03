@@ -1,98 +1,123 @@
 package cc.firebloom.sahara.sender;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
-import ru.camino.parts.adapter.SectionListAdapter;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class BlackListAdapter extends SectionListAdapter {
-  protected final int mHeaderLayoutId = android.R.layout.preference_category;
-  protected final int mTitleTextViewId = android.R.id.title;
+import com.emilsjolander.components.StickyListHeaders.StickyListHeadersBaseAdapter;
+
+public class BlackListAdapter extends StickyListHeadersBaseAdapter {
+//  protected static final int HEADER_LAYOUT = android.R.layout.preference_category;
+//  protected static final int mTitleTextViewId = android.R.id.title;
   
-  protected SectionDetector mSectionDetector;
+//  protected SectionDetector mSectionDetector;
   
   protected Context mContext;
+  protected LayoutInflater mInflater;
+  
   protected Sender mSender;
   protected ArrayList<String> mCustomList;
   protected ArrayList<String> mPublicList;
   
-  public BlackListAdapter(BaseAdapter adapter, Context context) {
-    super(adapter);
-    
-    setSectionDetector(new MySectionDetector());
+  protected static int HEADER_ID_CUSTOM = 0;
+  protected static int HEADER_ID_PUBLIC = 1;
+  
+  public BlackListAdapter(Context context) {
+    super(context);
     
     mContext = context;
+    mInflater = LayoutInflater.from(context);
     mSender = new Sender(context);
+    mCustomList = mSender.customList();
+    try {
+      mPublicList = mSender.publicList();
+    } catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
+  public int getCount() {
+    return mCustomList.size() + mPublicList.size();
+  }
+
+  public Object getItem(int position) {
+    if(mCustomList.size() > position){
+      return mCustomList.get(position);
+    } else {
+      position -= mCustomList.size();
+      return mPublicList.get(position);
+    }
+  }
+
+  public long getItemId(int position) {
+    return position;
+  }
   
+  @Override
+  public long getHeaderId(int position) {
+    if(mCustomList.size() > position){
+      return HEADER_ID_CUSTOM;
+    } else {
+      return HEADER_ID_PUBLIC;
+    }
+  }
+  
+  public String headerTitle(long id){
+    if(HEADER_ID_CUSTOM == id){
+      return "custom";
+    } else {
+      return "public";
+    }
+  }
 
   @Override
-  protected Object getSectionHeader(Object firstItem, Object secondItem) {
-    if (getSectionDetector() != null) {
-      return getSectionDetector().detectSection(firstItem, secondItem);
-    } else {
-      return null;
+  public View getHeaderView(int position, View convertView) {
+    HeaderViewHolder holder;
+    
+    if(convertView == null){
+      holder = new HeaderViewHolder();
+      convertView = mInflater.inflate(android.R.layout.preference_category, null);
+      holder.text = (TextView) convertView.findViewById(android.R.id.title);
+      convertView.setTag(holder);
+    }else{
+      holder = (HeaderViewHolder) convertView.getTag();
     }
+    
+    //set header text as first char in name
+    holder.text.setText(headerTitle(getHeaderId(position)));
+    
+    return convertView;
+  }
+
+  class HeaderViewHolder{
+    TextView text;
   }
 
   @Override
-  protected View getSectionView(Object header, View convertView, ViewGroup parent) {
-    View v;
-    if (convertView != null) {
-      v = convertView;
-    } else {
-      v = View.inflate(mContext, mHeaderLayoutId, null);
+  protected View getView(int position, View convertView) {
+    ItemViewHolder holder;
+    
+    if(convertView == null){
+      holder = new ItemViewHolder();
+      convertView = mInflater.inflate(android.R.layout.simple_list_item_1, null);
+      holder.text = (TextView) convertView.findViewById(android.R.id.text1);
+      convertView.setTag(holder);
+    }else{
+      holder = (ItemViewHolder) convertView.getTag();
     }
-    ((TextView) v.findViewById(mTitleTextViewId)).setText(header.toString());
+    
+    holder.text.setText(getItem(position).toString());
+    
+    return convertView;
+  }
 
-    return v;
+  class ItemViewHolder{
+    TextView text;
   }
   
-  protected class MySectionDetector implements SectionDetector {
-    public Object detectSection(Object firstItem, Object secondItem) {
-      if(null == firstItem) {
-        if(mCustomList.contains(secondItem)) {
-          return "custom";
-        } else {
-          return "public";
-        }
-      } else if(mCustomList.contains(firstItem) && mPublicList.contains(secondItem)) {
-        return "public";
-      } else if(mPublicList.contains(firstItem) && mCustomList.contains(secondItem)) {
-        return "custom";
-      } else {
-        return null;
-      }
-    }
-  }
-  
-//  protected SectionDetector sectionDetector(){
-//    if(null == mSectionDetector) {
-//      mSectionDetector = new SectionDetector() {
-//        public Object detectSection(Object firstItem, Object secondItem) {
-//          if(null == firstItem) {
-//            if(mCustomList.contains(secondItem)) {
-//              return "custom";
-//            } else {
-//              return "public";
-//            }
-//          } else if(mCustomList.contains(firstItem) && mPublicList.contains(secondItem)) {
-//            return "public";
-//          } else if(mPublicList.contains(firstItem) && mCustomList.contains(secondItem)) {
-//            return "custom";
-//          } else {
-//            return null;
-//          }
-//        }
-//      };
-//    }
-//    
-//    return mSectionDetector;
-//  }
-
 }

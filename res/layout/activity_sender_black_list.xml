@@ -32,10 +32,13 @@
         android:layout_below="@+id/new_number"
         android:orientation="vertical" >
         
-        <com.wagado.widget.StickySectionListView
+        <com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView
+	        xmlns:slh="http://schemas.android.com/apk/res-auto"
 	        android:id="@android:id/list"
-	        android:layout_width="fill_parent"
-	        android:layout_height="fill_parent" />
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        slh:areHeadersSticky="true"
+	        android:clipToPadding="false" />
     </LinearLayout>
 
 </RelativeLayout>
