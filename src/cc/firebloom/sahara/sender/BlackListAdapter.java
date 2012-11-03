@@ -31,7 +31,7 @@ public class BlackListAdapter extends StickyListHeadersBaseAdapter {
     
     mContext = context;
     mInflater = LayoutInflater.from(context);
-    mSender = new Sender(context);
+    mSender = Sender.getInst(context);
     mCustomList = mSender.customList();
     try {
       mPublicList = mSender.publicList();

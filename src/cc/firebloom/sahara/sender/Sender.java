@@ -16,12 +16,11 @@ import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
 
-import cc.firebloom.sahara.R;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import cc.firebloom.sahara.R;
 
 public class Sender {
   protected static String CUSTOM_LIST_FILE = "custom_sender_black_list.yml";
@@ -32,23 +31,51 @@ public class Sender {
   protected Context mContext;
   protected Yaml mYaml;
   
-  public Sender(Context context) {
+  protected ArrayList<String> mFull;
+  protected ArrayList<String> mCustom;
+  protected ArrayList<String> mPublic;
+  
+  private static Sender sm_inst;
+  
+  private Sender(Context context) {
     mContext = context;
     mYaml = new Yaml();
   }
   
-  public ArrayList<String> fullList() {
-    ArrayList<String> list = new ArrayList<String>();
-    
-    try {
-      for(Object number:(ArrayList<Object>)mYaml.load(cacheStream())) {
-        list.add(number.toString());
-      }      
-    } catch (IOException e) {
-      e.printStackTrace();
+  static public Sender getInst(Context context) {
+    if (null == sm_inst) {
+      sm_inst = new Sender(context);
     }
     
-    return list;
+    return sm_inst;
+  }
+  
+  public ArrayList<String> fullList() {
+    if (null == mFull) {
+      mFull = new ArrayList<String>();
+      
+      try {
+        for(Object number:(ArrayList<Object>)mYaml.load(cacheStream())) {
+          mFull.add(number.toString());
+        }      
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+    
+    return mFull;
+  }
+  
+  protected void flushFullList() {
+    if (null != mFull) {
+      mFull.clear();
+      mFull.addAll(customList());
+      try {
+        mFull.addAll(publicList());
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
   
   protected InputStream cacheStream() throws IOException {
@@ -82,29 +109,45 @@ public class Sender {
   }
   
   public ArrayList<String> customList() {
-    ArrayList<String> list = new ArrayList<String>();
-    
-    try {
-      InputStream in = mContext.openFileInput(CUSTOM_LIST_FILE);
-      list.addAll((ArrayList<String>)mYaml.load(in));
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
+    if (null == mCustom) {
+      mCustom = new ArrayList<String>();
+      
+      try {
+        InputStream in = mContext.openFileInput(CUSTOM_LIST_FILE);
+        mCustom.addAll((ArrayList<String>)mYaml.load(in));
+      } catch (FileNotFoundException e) {
+        e.printStackTrace();
+      }
     }
     
-    return list;
+    return mCustom;
   }
   
-  public void saveCustomList(List<String> list) {
+  public void addNumber(String num) {
+    num = num.replaceAll("\\D", "");
+    customList().add(num);
+    
+    flushFullList();
+  }
+  
+  public void removeNumber(String num) {
+    if (customList().remove(num)) {
+      saveCustomList();
+      flushFullList();
+    }
+  }
+  
+  public void saveCustomList() {
     // remove dup
     LinkedHashSet<String> set = new LinkedHashSet<String>();
-    set.addAll(list);
-    list.clear();
-    list.addAll(set);
+    set.addAll(mCustom);
+    mCustom.clear();
+    mCustom.addAll(set);
     
     try {
       FileOutputStream fos = mContext.openFileOutput(CUSTOM_LIST_FILE, 
           Context.MODE_PRIVATE);
-      fos.write(mYaml.dump(list).getBytes());
+      fos.write(mYaml.dump(mCustom).getBytes());
       fos.close();
     } catch (FileNotFoundException e) {
       e.printStackTrace();
@@ -114,16 +157,18 @@ public class Sender {
   }
   
   public ArrayList<String> publicList() throws IOException {
-    ArrayList<String> list = new ArrayList<String>();
-    
-    try {
-      list.addAll(loadPublicList());
-    } catch (FileNotFoundException e) {
-      useLocalPublicList();
-      list.addAll(loadPublicList()); // try again and throw exception
+    if (null == mPublic) {
+      mPublic = new ArrayList<String>();
+      
+      try {
+        mPublic.addAll(loadPublicList());
+      } catch (FileNotFoundException e) {
+        useLocalPublicList();
+        mPublic.addAll(loadPublicList()); // try again and throw exception
+      }
     }
     
-    return list;
+    return mPublic;
   }
   
   protected List<String> loadPublicList() throws FileNotFoundException {
@@ -178,6 +223,8 @@ public class Sender {
         
         fos.flush();
         fos.close();
+        
+        flushFullList();
       } else {
         Log.i("FIXME", String.format("got status code %s while downloading " +
                                      "online sender black list", respCode));
