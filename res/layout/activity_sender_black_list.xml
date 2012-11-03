@@ -4,23 +4,25 @@
     android:layout_height="match_parent" >
 
     <EditText
-        android:id="@+id/new_number"
+        android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/add_new_number"
-        android:layout_alignBottom="@+id/add_new_number"
+        android:layout_toLeftOf="@+id/add"
         android:ems="10"
         android:inputType="phone" >
+
     </EditText>
 
     <Button
-        android:id="@+id/add_new_number"
+        android:id="@+id/add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:onClick="onAdd"
         android:text="+" />
 
     <LinearLayout
@@ -29,7 +31,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/new_number"
+        android:layout_below="@+id/text"
         android:orientation="vertical" >
         
         <com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView

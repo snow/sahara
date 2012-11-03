@@ -19,7 +19,6 @@ public class BlackListAdapter extends StickyListHeadersBaseAdapter {
   protected Context mContext;
   protected LayoutInflater mInflater;
   
-  protected Sender mSender;
   protected ArrayList<String> mCustomList;
   protected ArrayList<String> mPublicList;
   
@@ -31,10 +30,10 @@ public class BlackListAdapter extends StickyListHeadersBaseAdapter {
     
     mContext = context;
     mInflater = LayoutInflater.from(context);
-    mSender = Sender.getInst(context);
-    mCustomList = mSender.customList();
+    Sender sender = Sender.getInst(context);
+    mCustomList = sender.customList();
     try {
-      mPublicList = mSender.publicList();
+      mPublicList = sender.publicList();
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

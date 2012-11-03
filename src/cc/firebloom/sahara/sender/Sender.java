@@ -127,6 +127,8 @@ public class Sender {
     num = num.replaceAll("\\D", "");
     customList().add(num);
     
+    saveCustomList();
+    
     flushFullList();
   }
   
