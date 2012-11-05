@@ -2,20 +2,29 @@ package cc.firebloom.sahara.sender;
 
 import android.annotation.TargetApi;
 import android.app.ListActivity;
+import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import cc.firebloom.sahara.R;
 
 public class BlackListActivity extends ListActivity {
   
-  private ListView mListView;
+  protected ListView mListView;
+  protected EditText mTextV;
+  protected BlackListAdapter mAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -27,12 +36,33 @@ public class BlackListActivity extends ListActivity {
     }
     
     mListView = this.getListView();
-    BlackListAdapter adapter = new BlackListAdapter(getBaseContext());
+    mAdapter = new BlackListAdapter(getBaseContext());
     
-    setListAdapter(adapter);
+    setListAdapter(mAdapter);
     mListView.setFastScrollEnabled(true);
     
 //    adapter.getFilter().filter("123");
+    mTextV = (EditText) findViewById(R.id.text);
+    mTextV.addTextChangedListener(new TextWatcher(){
+      public void afterTextChanged(Editable s) {}
+
+      public void beforeTextChanged(CharSequence s, int start, int count,
+          int after) {}
+
+      public void onTextChanged(CharSequence s, int start, int before, int count) {
+        mAdapter.getFilter().filter(s);
+      }
+    });
+    mTextV.setOnEditorActionListener(new EditText.OnEditorActionListener(){
+
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (EditorInfo.IME_ACTION_DONE == actionId) {
+          onAdd(null);
+        }
+        
+        return true;
+      }
+    });
   }
 
   @Override
@@ -58,9 +88,16 @@ public class BlackListActivity extends ListActivity {
   }
   
   public void onAdd(View view){
-    String num = ((EditText) findViewById(R.id.text)).getText().toString();
-//    Sender.getInst(this).addNumber(num);
-//    ((BlackListAdapter) mListView.getAdapter()).notifyDataSetChanged();
-    ((BlackListAdapter) getListAdapter()).getFilter().filter(num);
+    String num = mTextV.getText().toString();
+    if (0 < num.length()) {
+      Sender.getInst(this).addNumber(num);
+      mAdapter.reload(); // reload must place before clear filter
+      mTextV.setText("");
+    }
+    
+    InputMethodManager iptmgr = 
+        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); 
+    iptmgr.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                                   InputMethodManager.HIDE_NOT_ALWAYS); 
   }
 }

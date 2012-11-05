@@ -66,15 +66,21 @@ public class Sender {
   }
   
   protected void flushFullList() {
-    if (null != mFull) {
-      mFull.clear();
-      mFull.addAll(customList());
-      try {
-        mFull.addAll(publicList());
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+//    if (null != mFull) {
+//      mFull.clear();
+//      mFull.addAll(customList());
+//      try {
+//        mFull.addAll(publicList());
+//      } catch (IOException e) {
+//        e.printStackTrace();
+//      }
+//    }
+    
+    File cache = new File(cachePath());
+    if(cache.exists()) {
+      cache.delete();
     }
+    mFull = null;
   }
   
   protected InputStream cacheStream() throws IOException {
@@ -126,7 +132,7 @@ public class Sender {
   
   public void addNumber(String num) {
     num = num.replaceAll("\\D", "");
-    customList().add(num);
+    customList().add(0, num);
     
     saveCustomList();
     

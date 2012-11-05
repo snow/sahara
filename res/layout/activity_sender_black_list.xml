@@ -12,7 +12,8 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/add"
         android:ems="10"
-        android:inputType="phone" >
+        android:inputType="phone"
+        android:imeOptions="actionDone" >
 
     </EditText>
 

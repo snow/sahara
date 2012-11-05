@@ -1,7 +1,6 @@
 package cc.firebloom.sahara.sender;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import android.annotation.TargetApi;
@@ -14,19 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import cc.firebloom.sahara.R;
 
 public class BlackListAdapter extends ArrayAdapter<String> {
-//  protected static final int HEADER_LAYOUT = android.R.layout.preference_category;
-//  protected static final int mTitleTextViewId = android.R.id.title;
-  
-//  protected SectionDetector mSectionDetector;
-  
   protected Context mContext;
   protected LayoutInflater mInflater;
   
-  protected ArrayList<String> mFullList;
-  protected ArrayList<String> mCustomList;
-  protected ArrayList<String> mPublicList;
+  protected int mFullSize;
+  protected int mCustomSize;
+  protected int mPublicSize;
   
   public BlackListAdapter(Context context) {
     super(context, android.R.id.text1);
@@ -35,18 +30,18 @@ public class BlackListAdapter extends ArrayAdapter<String> {
     mInflater = LayoutInflater.from(context);
     
     Sender sender = Sender.getInst(context);
-    mFullList = sender.fullList();
-    mCustomList = sender.customList();
+    mFullSize = sender.fullList().size();
+    mCustomSize = sender.customList().size();
     try {
-      mPublicList = sender.publicList();
+      mPublicSize = sender.publicList().size();
     } catch (IOException e) {
       e.printStackTrace();
     }
     
     if(VERSION_CODES.HONEYCOMB <= VERSION.SDK_INT) {
-      _addAll(mFullList);
+      _addAll(sender.fullList());
     } else {
-      for(String num:mFullList) {
+      for(String num:sender.fullList()) {
         add(num);
       }
     }
@@ -57,25 +52,25 @@ public class BlackListAdapter extends ArrayAdapter<String> {
     addAll(collection);
   }
   
-//  @Override
-//  public int getCount() {
-//    return mCustomList.size() + mPublicList.size();
-//  }
-//
-//  @Override
-//  public String getItem(int position) {
-//    if(mCustomList.size() > position){
-//      return mCustomList.get(position);
-//    } else {
-//      position -= mCustomList.size();
-//      return mPublicList.get(position);
-//    }
-//  }
-
-//  @Override
-//  public long getItemId(int position) {
-//    return position;
-//  }
+  public void reload(){
+    Sender sender = Sender.getInst(mContext);
+    mFullSize = sender.fullList().size();
+    mCustomSize = sender.customList().size();
+    try {
+      mPublicSize = sender.publicList().size();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    clear();
+    if(VERSION_CODES.HONEYCOMB <= VERSION.SDK_INT) {
+      _addAll(sender.fullList());
+    } else {
+      for(String num:sender.fullList()) {
+        add(num);
+      }
+    }
+  }
   
   class ItemViewHolder{
     TextView header;
@@ -101,15 +96,15 @@ public class BlackListAdapter extends ArrayAdapter<String> {
     holder.text.setText(getItem(position));
     
     String header = null;
-    if (this.getCount() == mFullList.size()) { // filter not in use
+    if (this.getCount() == mFullSize) { // filter not in use
       if (0 == position) {
-        if (0 == mCustomList.size()) {
-          header = "public";
+        if (0 == mCustomSize) {
+          header = mContext.getString(R.string.sender_black_list_section_public);
         } else {
-          header = "custom";
+          header = mContext.getString(R.string.sender_black_list_section_custom);
         }
-      } else if (mCustomList.size() == position) {
-        header = "public";
+      } else if (mCustomSize == position) {
+        header = mContext.getString(R.string.sender_black_list_section_public);
       }
     }
     
