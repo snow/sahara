@@ -28,24 +28,6 @@
             </intent-filter>
         </activity>
 
-        <!--
-        <receiver android:name=".SMSInterceptor">
-            <intent-filter android:priority="1">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
-            </intent-filter>
-        </receiver>
-        -->
-
-
-        <!--
-        <receiver android:name=".MMSInterceptor">
-				  <intent-filter android:priority="1">
-				    <action android:name="android.provider.Telephony.WAP_PUSH_RECEIVED" />
-				    <data android:mimeType="application/vnd.wap.mms-message" />
-				  </intent-filter>
-				</receiver>
-        -->
-
         <receiver android:name=".MessageReceiver" >
             <intent-filter android:priority="1" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
