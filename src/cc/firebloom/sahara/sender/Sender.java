@@ -12,7 +12,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -114,7 +113,9 @@ public class Sender {
       
       try {
         InputStream in = mContext.openFileInput(CUSTOM_LIST_FILE);
-        mCustom.addAll((ArrayList<String>)mYaml.load(in));
+        for(Object num:(ArrayList<Object>)mYaml.load(in)) {
+          mCustom.add(num.toString());
+        }
       } catch (FileNotFoundException e) {
         e.printStackTrace();
       }
@@ -173,9 +174,13 @@ public class Sender {
     return mPublic;
   }
   
-  protected List<String> loadPublicList() throws FileNotFoundException {
+  protected ArrayList<String> loadPublicList() throws FileNotFoundException {
     InputStream in = mContext.openFileInput(PUBLIC_LIST_FILE);
-    return (ArrayList<String>)mYaml.load(in);
+    ArrayList<String> list = new ArrayList<String>();
+    for(Object num:(ArrayList<Object>)mYaml.load(in)) {
+      list.add(num.toString());
+    }
+    return list;
   }
     
   public void useLocalPublicList() throws IOException {

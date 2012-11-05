@@ -1,7 +1,7 @@
 package cc.firebloom.sahara.sender;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
@@ -13,9 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import cc.firebloom.sahara.R;
 
-import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
-
-public class BlackListActivity extends Activity {
+public class BlackListActivity extends ListActivity {
   
   private ListView mListView;
 
@@ -28,9 +26,13 @@ public class BlackListActivity extends Activity {
       configActionBar();
     }
     
-    mListView = (StickyListHeadersListView) findViewById(android.R.id.list);
-    mListView.setAdapter(new BlackListAdapter(getBaseContext()));
+    mListView = this.getListView();
+    BlackListAdapter adapter = new BlackListAdapter(getBaseContext());
+    
+    setListAdapter(adapter);
     mListView.setFastScrollEnabled(true);
+    
+//    adapter.getFilter().filter("123");
   }
 
   @Override
@@ -57,7 +59,8 @@ public class BlackListActivity extends Activity {
   
   public void onAdd(View view){
     String num = ((EditText) findViewById(R.id.text)).getText().toString();
-    Sender.getInst(this).addNumber(num);
-    ((BlackListAdapter) mListView.getAdapter()).notifyDataSetChanged();
+//    Sender.getInst(this).addNumber(num);
+//    ((BlackListAdapter) mListView.getAdapter()).notifyDataSetChanged();
+    ((BlackListAdapter) getListAdapter()).getFilter().filter(num);
   }
 }

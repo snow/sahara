@@ -25,22 +25,12 @@
         android:onClick="onAdd"
         android:text="+" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/text"
-        android:orientation="vertical" >
-        
-        <com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView
-	        xmlns:slh="http://schemas.android.com/apk/res-auto"
-	        android:id="@android:id/list"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        slh:areHeadersSticky="true"
-	        android:clipToPadding="false" />
-    </LinearLayout>
+        android:layout_below="@+id/text" >
+    </ListView>
 
 </RelativeLayout>
