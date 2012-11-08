@@ -6,7 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.BaseColumns;
 
 /**
  * Contract of all content provider in this project
@@ -70,5 +72,14 @@ public final class Sahara {
     }
     
     return dateFormt.format(date);
+  }
+  
+  public static final class SMS implements BaseColumns {
+    public static final Uri INBOX_URI = Uri.parse("content://sms/inbox");
+    
+    public static final String THREAD_ID = "thread_id";
+    public static final String ADDRESS = "address";
+    public static final String SUBJECT = "subject";
+    public static final String BODY = "body";
   }
 }
