@@ -30,7 +30,7 @@ public class InboxActivity extends ListActivity {
   public static final String CONTENT = "content";
   public static final String BLOCKED = "blocked";
   
-  protected InboxAdapter adapter;
+  protected InboxAdapter _adapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -90,14 +90,14 @@ public class InboxActivity extends ListActivity {
         data.add(map);
       }
       
-      adapter = new InboxAdapter(
+      _adapter = new InboxAdapter(
         this, 
         data, 
         R.layout.inbox_list_item, 
         new String[]{NUMBER, CONTENT, BLOCKED}, 
         new int[]{R.id.title, R.id.content, R.id.blocked});
       
-      setListAdapter(adapter);
+      setListAdapter(_adapter);
     }
   }
 
@@ -123,21 +123,7 @@ public class InboxActivity extends ListActivity {
   }
   
   protected void onListItemClick(ListView l, View v, int position, long id) {
-    Map<String, String> record = (Map<String, String>) getListAdapter().getItem(position);
-    String number = record.get(NUMBER);
-    
-    TextView blockedV = (TextView) v.findViewById(R.id.blocked);
-    Sender sender = Sender.getInst(this);
-    
-    if(0 == blockedV.getText().length()) {
-      sender.addNumber(number);
-      
-      adapter.setViewBlocked(v);
-    } else {
-      sender.removeNumber(number);
-      
-      adapter.setViewUnblocked(v);
-    }
+    _adapter.toggleBlocked(v, position);
   }
   
   protected void discoverColumnNames(Cursor c){
