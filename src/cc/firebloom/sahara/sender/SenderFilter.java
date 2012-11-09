@@ -18,15 +18,10 @@ public class SenderFilter {
 //    if(from.startsWith("86") && (13 == from.length())){
 //      from = from.substring(2).trim();
 //    }
-    from = from.replaceAll("\\D", "");
-    
-    Sender sender = Sender.getInst(context);
-    for(String blockedNum:sender.fullList()){
-      if(from.endsWith(blockedNum)){
-        return blockedNum;
-      }
+    if (Sender.getInst(context).shouldBlockNumber(from)) {
+      return from;
+    } else {
+      return null;
     }
-    
-    return null;
   }
 }

@@ -49,6 +49,18 @@ public class Sender {
     return sm_inst;
   }
   
+  public boolean shouldBlockNumber(String number) {
+    number = number.replaceAll("\\D", "");
+    
+    for(String blockedNum:fullList()){
+      if(number.endsWith(blockedNum)){
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
   public ArrayList<String> fullList() {
     if (null == mFull) {
       mFull = new ArrayList<String>();
