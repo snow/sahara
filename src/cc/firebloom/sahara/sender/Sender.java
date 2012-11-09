@@ -18,14 +18,20 @@ import org.yaml.snakeyaml.Yaml;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.util.Log;
 import cc.firebloom.sahara.R;
+import cc.firebloom.sahara.Sahara;
 
 public class Sender {
   protected static String CUSTOM_LIST_FILE = "custom_sender_black_list.yml";
   protected static String PUBLIC_LIST_FILE = "public_sender_black_list.yml";
   protected static String LIST_URI = "https://raw.github.com/snow/sahara/" +
   		"master/res/raw/sender_black_list.yml";
+  
+  protected static final String BACKUP_PATH = String.format("%s/%s", 
+      Environment.getExternalStorageDirectory().getPath(), 
+      Sahara.PACKAGE);
   
   protected Context mContext;
   protected Yaml mYaml;
@@ -134,8 +140,27 @@ public class Sender {
         for(Object num:(ArrayList<Object>)mYaml.load(in)) {
           mCustom.add(num.toString());
         }
+        if (0 == mCustom.size()) {
+          throw new FileNotFoundException();
+        }
       } catch (FileNotFoundException e) {
-        e.printStackTrace();
+        // try to read from external storage
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+          // We can read and write the media
+          File backupFile = new File(BACKUP_PATH, CUSTOM_LIST_FILE);
+          try {
+            InputStream in = new FileInputStream(backupFile);
+            for(Object num:(ArrayList<Object>)mYaml.load(in)) {
+              mCustom.add(num.toString());
+            }
+            // save to internal storage
+            if (0 < mCustom.size()) {
+              saveCustomList();
+            }
+          } catch (FileNotFoundException e1) {
+            e1.printStackTrace();
+          }
+        }
       }
     }
     
@@ -169,8 +194,21 @@ public class Sender {
     try {
       FileOutputStream fos = mContext.openFileOutput(CUSTOM_LIST_FILE, 
           Context.MODE_PRIVATE);
-      fos.write(mYaml.dump(mCustom).getBytes());
+      String yaml = mYaml.dump(mCustom);
+      fos.write(yaml.getBytes());
       fos.close();
+      
+      // backup to external storage
+      if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
+        // We can read and write the media
+        File backupDir = new File(BACKUP_PATH);
+        if(backupDir.exists() || backupDir.mkdirs()) {
+          FileOutputStream backupFOS = 
+              new FileOutputStream(new File(backupDir, CUSTOM_LIST_FILE));
+          backupFOS.write(yaml.getBytes());
+          backupFOS.close();
+        } 
+      }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {

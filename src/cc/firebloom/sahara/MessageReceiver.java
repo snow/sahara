@@ -220,7 +220,7 @@ public class MessageReceiver extends BroadcastReceiver {
       if(extStorageDir.exists() || extStorageDir.mkdirs()) {
         bakDir = extStorageDir;
       } 
-    } 
+    }
     
     if(null == bakDir){
       bakDir = context.getDir(Sahara.Message.STORE_DIR, Context.MODE_PRIVATE);
