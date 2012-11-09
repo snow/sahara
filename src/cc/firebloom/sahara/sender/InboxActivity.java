@@ -1,6 +1,8 @@
 package cc.firebloom.sahara.sender;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.annotation.TargetApi;
 import android.app.ListActivity;
@@ -12,6 +14,9 @@ import android.support.v4.app.NavUtils;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
 import cc.firebloom.sahara.R;
 import cc.firebloom.sahara.Sahara;
 
@@ -20,6 +25,12 @@ public class InboxActivity extends ListActivity {
   protected int _colAddress = 0;
   protected int _colSubject = 0;
   protected int _colBody = 0;
+  
+  public static final String NUMBER = "number";
+  public static final String CONTENT = "content";
+  public static final String BLOCKED = "blocked";
+  
+  protected InboxAdapter adapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -38,29 +49,45 @@ public class InboxActivity extends ListActivity {
                                           },null,null,null);
     
     if (null != c) {
-      SparseArray<ArrayList<String>> list = new SparseArray<ArrayList<String>>(c.getCount());
-      
       discoverColumnNames(c);
+      
+      SparseArray<ArrayList<String>> threads = new SparseArray<ArrayList<String>>(c.getCount());
       
       while(c.moveToNext()) {
         int threadId = c.getInt(_colThreadId);
         
-        ArrayList<String> record = list.get(threadId);
+        ArrayList<String> record = threads.get(threadId);
         if (null == record) {
           record = new ArrayList<String>();
           record.add(c.getString(_colAddress));
-          list.put(threadId, record);
+          threads.put(threadId, record);
         }
         
         record.add(c.getString(_colBody));
       }
       
-      InboxAdapter adapter = new InboxAdapter(this);
-      for (int i = 0; i < list.size(); i++) {
-        ArrayList<String> record = list.valueAt(i);
-        String summary = join(record, "\n");
-        adapter.add(summary);
+      Sender sender = Sender.getInst(this);
+      ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+      for (int i = 0; i < threads.size(); i++) {
+        ArrayList<String> thread = threads.valueAt(i);
+        HashMap<String, String> map = new HashMap<String, String>();
+        String number = thread.get(0);
+        map.put(NUMBER, number);
+        thread.remove(0);
+        map.put(CONTENT, join(thread, "\n"));
+        map.put(BLOCKED, sender.shouldBlockNumber(number) ? 
+                           getString(R.string.inbox_blocked) : 
+                           getString(R.string.inbox_unblocked));
+        
+        data.add(map);
       }
+      
+      adapter = new InboxAdapter(
+        this, 
+        data, 
+        R.layout.inbox_list_item, 
+        new String[]{NUMBER, CONTENT, BLOCKED}, 
+        new int[]{R.id.title, R.id.content, R.id.blocked});
       
       setListAdapter(adapter);
     }
@@ -85,6 +112,24 @@ public class InboxActivity extends ListActivity {
       return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+  
+  protected void onListItemClick(ListView l, View v, int position, long id) {
+    Map<String, String> record = (Map<String, String>) getListAdapter().getItem(position);
+    String number = record.get(NUMBER);
+    
+    TextView blockedV = (TextView) v.findViewById(R.id.blocked);
+    Sender sender = Sender.getInst(this);
+    
+    if(0 == blockedV.getText().length()) {
+      sender.addNumber(number);
+      
+      adapter.setViewBlocked(v);
+    } else {
+      sender.removeNumber(number);
+      
+      adapter.setViewUnblocked(v);
+    }
   }
   
   protected void discoverColumnNames(Cursor c){

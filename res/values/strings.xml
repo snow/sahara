@@ -19,5 +19,7 @@
     <string name="sender_black_list_section_public">Public</string>
     
     <string name="title_activity_inbox">InboxActivity</string>
+    <string name="inbox_blocked">blocked</string>
+    <string name="inbox_unblocked"></string>
 
 </resources>

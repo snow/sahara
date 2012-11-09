@@ -152,6 +152,7 @@ public class Sender {
   }
   
   public void removeNumber(String num) {
+    num = num.replaceAll("\\D", "");
     if (customList().remove(num)) {
       saveCustomList();
       flushFullList();

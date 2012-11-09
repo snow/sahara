@@ -18,7 +18,10 @@ Sahara读取了所有联系人的电话号码，从而能够放过这些号码�
 不监听过滤个鸡巴呀！
 
 ### 读写外部存储
-拦截下来的短信，以YAML格式存在了sdcard的`cc.firebloom.sahara`目录下
+拦截下来的短信，以YAML格式存在了sdcard的`cc.firebloom.sahara`目录下。
+
+### 读短信收件箱
+Sahara可以读你的短信收件箱，然后让你从中选择要屏蔽号码。
 
 ## 我TM就是不相信你!!
 源代码在 https://github.com/snow/sahara ，自己读，自己编译自己装
