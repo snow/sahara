@@ -46,7 +46,10 @@ public class InboxActivity extends ListActivity {
                                             Sahara.SMS.ADDRESS,
                                             Sahara.SMS.SUBJECT,
                                             Sahara.SMS.BODY
-                                          },null,null,null);
+                                          },
+                                          // exclude threads from contacts
+                                          "person is null", 
+                                          null,null);
     
     if (null != c) {
       discoverColumnNames(c);
@@ -54,6 +57,11 @@ public class InboxActivity extends ListActivity {
       SparseArray<ArrayList<String>> threads = new SparseArray<ArrayList<String>>(c.getCount());
       
       while(c.moveToNext()) {
+//        for(int i = 0; i < c.getColumnCount(); i++) {
+//          Log.i("> w <", c.getColumnName(i) + ": " + c.getString(i));
+//        }
+//        Log.i("> w <", "---------");
+        
         int threadId = c.getInt(_colThreadId);
         
         ArrayList<String> record = threads.get(threadId);
