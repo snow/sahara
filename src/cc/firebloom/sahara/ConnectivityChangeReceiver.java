@@ -18,7 +18,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
     AlarmManager almgr = 
         (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     int type = AlarmManager.ELAPSED_REALTIME;
-    long intervalMillis = AlarmManager.INTERVAL_DAY;
+    long intervalMillis = AlarmManager.INTERVAL_HALF_DAY;
     long triggerAtMillis = SystemClock.elapsedRealtime() + intervalMillis;
     almgr.setInexactRepeating(type, triggerAtMillis, intervalMillis, operation);
     
