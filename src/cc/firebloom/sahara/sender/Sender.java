@@ -26,7 +26,7 @@ import cc.firebloom.sahara.Sahara;
 public class Sender {
   protected static String CUSTOM_LIST_FILE = "custom_sender_black_list.yml";
   protected static String PUBLIC_LIST_FILE = "public_sender_black_list.yml";
-  protected static String LIST_URI = "https://raw.github.com/snow/sahara/" +
+  protected static String LIST_URI = "http://raw.github.com/snow/sahara/" +
   		"master/res/raw/sender_black_list.yml";
   
   protected static final String BACKUP_PATH = String.format("%s/%s", 

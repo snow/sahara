@@ -23,7 +23,7 @@ public class Keyword {
   protected static final String PLACEHOLDER_REQ_LINK = "__REQ_LN__";
   protected static final String REGEX_LINK = "[\\d-]{5,13}|http://[\\w\\d.]+";
   protected static final String REGEX_ZHCN_PUNCT = "[“！？；。，…【】《》『』]+";
-  protected static final String KEYWORD_URI = "https://raw.github.com/" +
+  protected static final String KEYWORD_URI = "http://raw.github.com/" +
   		"snow/sahara/master/res/raw/init_keywords.yml";
   protected static final String LIST_FILE = "keyword_list.yml";
   

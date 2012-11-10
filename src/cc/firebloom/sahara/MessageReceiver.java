@@ -179,32 +179,12 @@ public class MessageReceiver extends BroadcastReceiver {
       contactNumbers.add(contactNumber);
     }
   }
-  
-//  private void persistMessage(SmsMessage sms, String matchedRule, Context context) {
-//    persistMessage(sms.getOriginatingAddress(), 
-//                   sms.getDisplayMessageBody(), 
-//                   sms.getTimestampMillis(), 
-//                   matchedRule, 
-//                   context);
-//  }
 
-  private void persistMessage(String from, String text, Long timestamp, String matchedRule, Context context) {
-//    String yamlSkeleton = "---\n" + 
-//                          "from: %s\n" + 
-//                          "sent_at: %s\n" + 
-//                          //"received_at: %s\n" + 
-//                          "text: %s\n" +
-//                          "matched rule: %s\n";
-    
+  private void persistMessage(String from, String text, Long timestamp, 
+                              String matchedRule, Context context) {
     Calendar calendar = Calendar.getInstance();
     calendar.setTimeInMillis(timestamp);
-    DateFormat yamlFormat = new SimpleDateFormat(Sahara.Yaml.DateTimeFormat); 
-    
-//    String msgYml = String.format(yamlSkeleton,
-//                                  from, 
-//                                  yamlFormat.format(calendar.getTime()),
-//                                  text,
-//                                  matchedRule);
+    DateFormat yamlFormat = new SimpleDateFormat(Sahara.Yaml.DateTimeFormat);
     
     Map<String, String> record = new HashMap<String, String>();
     record.put(Sahara.Message.FROM, from);
@@ -239,27 +219,10 @@ public class MessageReceiver extends BroadcastReceiver {
       fos.write(msgYml.getBytes());
       fos.close();
     } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
   } // persistMessage
-  
-//  private void saveStringToPath(String text, File dir, String name){
-//    //Log.d(TAG, "saving to: " + dir.getPath());
-//    try {
-//      FileOutputStream fos = new FileOutputStream(new File(dir, name));
-//      fos.write(text.getBytes());
-//      fos.close();
-//    } catch (FileNotFoundException e) {
-//      // TODO Auto-generated catch block
-//      e.printStackTrace();
-//    } catch (IOException e) {
-//      // TODO Auto-generated catch block
-//      e.printStackTrace();
-//    }
-//  } // saveStringToPath
   
 }
