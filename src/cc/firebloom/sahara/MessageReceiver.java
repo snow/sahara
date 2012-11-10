@@ -27,7 +27,7 @@ import android.os.Environment;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import cc.firebloom.sahara.filters.KeywordFilter;
+import cc.firebloom.sahara.keyword.KeywordFilter;
 import cc.firebloom.sahara.sender.SenderFilter;
 
 public class MessageReceiver extends BroadcastReceiver {
@@ -133,7 +133,11 @@ public class MessageReceiver extends BroadcastReceiver {
           persistMessage(from, text, timestamp, matchedRule, context);       
           
           abortBroadcast();
-        }
+          
+          //Log.i("> w <", String.format("blocked: [%s] %s", from, text));
+        } //else {
+          //Log.i("> w <", String.format("passed: [%s] %s", from, text));
+        //}
       }
     }
   } // onReceive
@@ -144,13 +148,16 @@ public class MessageReceiver extends BroadcastReceiver {
     }
     
     from = from.replaceAll("[ +_-]", "");
-    for(String contactNumber:contactNumbers) {
-      if (from.endsWith(contactNumber)) {
-        return null;
+    String matchedRule = SenderFilter.isSpam(from, context);
+    
+    if(null == matchedRule) {
+      for(String contactNumber:contactNumbers) {
+        if (from.endsWith(contactNumber)) {
+          return null;
+        }
       }
     }
     
-    String matchedRule = SenderFilter.isSpam(from, context);
     if(null == matchedRule){
       matchedRule = KeywordFilter.isSpam(text, context);
     }
