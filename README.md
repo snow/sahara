@@ -12,6 +12,9 @@ Sahara: 简单的垃圾短信拦截应用
 * 可以自己加发信号码到黑名单
 * 可以查看已经拦截下来短信
 
+## TODO / 下一步
+https://github.com/snow/sahara/issues
+
 ## 权限說明
 ### 读联系人
 Sahara读取了所有联系人的电话号码，从而能够放过这些号码发来的短信。所以如果你特殊癖好，比如爱读[沃冲浪]，那把沃冲浪的号码添加为联系人好了。
@@ -28,12 +31,8 @@ Sahara可以读你的短信收件箱，然后让你从中选择要屏蔽号码�
 ### 监听网络状态改变
 Sahara只是利用网络状态改变的回调来注册一天一次的更新黑名单的计划任务而已。详见 https://github.com/snow/sahara/blob/master/src/cc/firebloom/sahara/ConnectivityChangeReceiver.java
 
-## 我TM就是不相信你!!
+## 我为啥要相信你?
 源代码在 https://github.com/snow/sahara ，自己读，自己编译自己装
-
-## 啥鸡巴？你想了解更多?
-* 自己读源代码
-* 学着用 https://github.com/snow/sahara/issues
 
 ## 其它
 * 用了 org.damazio.notifier.event.receivers.mms 这个第三方的开源包，其实是从AOSP里萃取出来的，Apache License, 在这里感谢原作者和萃取者。
