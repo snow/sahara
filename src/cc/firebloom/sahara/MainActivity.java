@@ -19,6 +19,7 @@ public class MainActivity extends PreferenceActivity {
     }
     
     //doEvil(getBaseContext());
+    //test();
   }
   
   // separate these codes into a method
@@ -47,5 +48,30 @@ public class MainActivity extends PreferenceActivity {
 //    
 //    Yaml yaml = new Yaml();
 //    Log.i("> w <", yaml.dump(ls));
+//  }
+  
+//  private void test(){
+//    Cursor c = getContentResolver().query(Sahara.SMS.INBOX_URI, 
+//        new String[]{
+//          Sahara.SMS.ADDRESS,
+//          Sahara.SMS.BODY
+//        },null,null,null);
+//    
+//    if (null != c) {
+//      int colAddr = c.getColumnIndex(Sahara.SMS.ADDRESS);
+//      int colBody = c.getColumnIndex(Sahara.SMS.BODY);
+//      
+//      while(c.moveToNext()) {
+//        String from = c.getString(colAddr);
+//        String text = c.getString(colBody);
+//        
+//        String matched = MessageReceiver.isSpam(from, text, this);
+//        if(null == matched) {
+//          Log.i("-w-", String.format("passed: %s | %s\n", from, text));
+//        } else {
+//          Log.i("-w-", String.format("blocked by [\"%s\"]: %s | %s\n", matched, from, text));
+//        }
+//      }
+//    }
 //  }
 }

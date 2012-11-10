@@ -21,8 +21,10 @@ import cc.firebloom.sahara.R;
 
 public class Keyword {
   protected static final String PLACEHOLDER_REQ_LINK = "__REQ_LN__";
-  protected static final String REGEX_LINK = "[\\d-]{5,13}|http://[\\w\\d.]+";
-  protected static final String REGEX_ZHCN_PUNCT = "[“！？；。，…【】《》『』]+";
+  //protected static final String REGEX_LINK = "\\+?[\\d-\\s]{5,}|[a-zA-Z0-9-]+\\.[a-zA-Z]{2,3}\\b";
+  protected static final Pattern LINK_PATTERN = 
+      Pattern.compile("\\+?[\\d-\\s]{5,}|[a-zA-Z0-9-]+\\.[a-zA-Z]{2,3}\\b");
+  //protected static final String REGEX_ZHCN_PUNCT = "[“！？；。，…【】《》『』]+";
   protected static final String KEYWORD_URI = "http://raw.github.com/" +
   		"snow/sahara/master/res/raw/init_keywords.yml";
   protected static final String LIST_FILE = "keyword_list.yml";
@@ -48,28 +50,41 @@ public class Keyword {
   }
   
   public String match(String text) {
-    text = text.replaceAll("\\s+", "").replaceAll("\\p{Punct}", "").
-        replaceAll(REGEX_ZHCN_PUNCT, "");
+    // this line break url pattern
+    //text = text.replaceAll("\\s+", "").replaceAll("\\p{Punct}", "").
+    //    replaceAll(REGEX_ZHCN_PUNCT, "");
     
     for(String kw:list()){
-      Pattern p = preprocessKeyword(kw);
+      boolean isLinkRequired = kw.contains(PLACEHOLDER_REQ_LINK);
+      Pattern p;
+      if (isLinkRequired) {
+        p = Pattern.compile(kw.replace(PLACEHOLDER_REQ_LINK, ""));
+      } else {
+        p = Pattern.compile(kw);
+      }
+      
       Matcher m = p.matcher(text);
       if(m.find()){
-        return kw;
+        if (isLinkRequired) {
+          Matcher linkMatcher = LINK_PATTERN.matcher(text);
+          if (linkMatcher.find()){
+            return kw;
+          }
+        } else {
+          return kw;
+        }
       }
     }
     
     return null;
   }
   
-  protected Pattern preprocessKeyword(String keyword){
-    return Pattern.compile(keyword.replace(PLACEHOLDER_REQ_LINK, REGEX_LINK));
-  }
-  
   public ArrayList<String> list() {
     if (null == _list) {
       _list = new ArrayList<String>();
-      
+    }
+     
+    if (0 == _list.size()) {
       try {
         InputStream in = _context.openFileInput(LIST_FILE);
         
