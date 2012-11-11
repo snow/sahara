@@ -94,42 +94,28 @@ public class MessageReceiver extends BroadcastReceiver {
       //boolean _isSpam = false;
       Object[] pdus = (Object[]) uinf.get("pdus");
       if(null != pdus){
-        SmsMessage[] messages = new SmsMessage[pdus.length];
+        String from = null;
+        Long timestamp = null;
         String matchedRule = null;
         StringBuffer msgBodyBuffer = new StringBuffer();
         
-        for (int i = 0; i < pdus.length; i++) {
-          SmsMessage sms = SmsMessage.createFromPdu((byte[]) pdus[i]);
-          messages[i] = sms;
+        for (Object bytes:pdus) {
+          SmsMessage sms = SmsMessage.createFromPdu((byte[]) bytes);
           msgBodyBuffer.append(sms.getMessageBody());
           
-          // --- dev ---
-          /*String strMsgBody = sms.getMessageBody().toString();
-          String strMsgSrc = sms.getOriginatingAddress();
-
-          String strMessage = "SMS from " + strMsgSrc + " : " + strMsgBody;
-
-          Log.d(TAG, "--------------------");
-          Log.d(TAG, strMessage);*/
-          // --- dev ---
+          if (null == from) {
+            from = sms.getOriginatingAddress();
+          }
           
-//          if(!_isSpam){
-//            matchedRule = isSpam(sms.getOriginatingAddress(), 
-//                                 sms.getMessageBody().toString(), 
-//                                 context);        
-//            if(null != matchedRule){
-//              // call abortBroadcast() after all pdus being processed
-//              _isSpam = true;
-//            }
-//          }
+          if (null == timestamp) {
+            timestamp = sms.getTimestampMillis();
+          }
         }
         
-        String from = messages[0].getOriginatingAddress();
         String text = msgBodyBuffer.toString();
         matchedRule = isSpam(from, text, context);  
         
         if(null != matchedRule){
-          Long timestamp = messages[0].getTimestampMillis();
           persistMessage(from, text, timestamp, matchedRule, context);       
           
           abortBroadcast();
