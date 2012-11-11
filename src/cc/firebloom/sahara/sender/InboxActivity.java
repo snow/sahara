@@ -2,7 +2,6 @@ package cc.firebloom.sahara.sender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import android.annotation.TargetApi;
 import android.app.ListActivity;
@@ -16,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 import cc.firebloom.sahara.R;
 import cc.firebloom.sahara.Sahara;
 
@@ -76,7 +74,7 @@ public class InboxActivity extends ListActivity {
       
       Sender sender = Sender.getInst(this);
       ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
-      for (int i = 0; i < threads.size(); i++) {
+      for (int i = threads.size() - 1; i >= 0; i--) {
         ArrayList<String> thread = threads.valueAt(i);
         HashMap<String, String> map = new HashMap<String, String>();
         String number = thread.get(0);
