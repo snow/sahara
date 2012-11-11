@@ -23,7 +23,7 @@ public class Keyword {
   protected static final String PLACEHOLDER_REQ_LINK = "__REQ_LN__";
   //protected static final String REGEX_LINK = "\\+?[\\d-\\s]{5,}|[a-zA-Z0-9-]+\\.[a-zA-Z]{2,3}\\b";
   protected static final Pattern LINK_PATTERN = 
-      Pattern.compile("\\+?[\\d-\\s]{5,}|[a-zA-Z0-9-]+\\.[a-zA-Z]{2,3}\\b");
+      Pattern.compile("\\+?[\\d-\\s]{5,}|[a-z0-9-]+\\.[a-z]{2,3}\\b");
   //protected static final String REGEX_ZHCN_PUNCT = "[“！？；。，…【】《》『』]+";
   protected static final String KEYWORD_URI = "http://raw.github.com/" +
   		"snow/sahara/master/res/raw/init_keywords.yml";
@@ -53,6 +53,7 @@ public class Keyword {
     // this line break url pattern
     //text = text.replaceAll("\\s+", "").replaceAll("\\p{Punct}", "").
     //    replaceAll(REGEX_ZHCN_PUNCT, "");
+    text = text.toLowerCase();
     
     for(String kw:list()){
       boolean isLinkRequired = kw.contains(PLACEHOLDER_REQ_LINK);
