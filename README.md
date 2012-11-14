@@ -38,7 +38,11 @@ Sahara只是利用网络状态改变的回调来注册一天一次的更新黑�
 ## 其它
 * 用了 org.damazio.notifier.event.receivers.mms 这个第三方的开源包，其实是从AOSP里萃取出来的，Apache License, 在这里感谢原作者和萃取者。
 
-## 下载测试版的apk
+## 下载
+### 市场
+https://play.google.com/store/apps/details?id=cc.firebloom.sahara
+
+### 测试版
 市场里的版本会更新比较慢，因为我投入在这个项目上的时间不多，而且把一个新功能做得差不多才会一次市场。
 而开发中的版本为了给朋友帮测试，就会在 http://code.google.com/p/sahara/downloads/list 放apk。
 感谢google提供空间带宽。/sigh
