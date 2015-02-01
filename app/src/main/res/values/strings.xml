@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Sahara</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_settings">Sahara</string>
+
+    <string name="pref_brief_title">What does it do</string>
+    <string name="pref_brief_summary">* 通过发信号码和关键词拦截涉嫌的垃圾短信\n* 公共发信号码黑名单和关键词黑名单是自动更新的，会不断完善\n* 来自联系人的短信豁免于关键词黑名单，不豁免于私人号码黑名单</string>
+    <string name="pref_go_to_project">Know more</string>
+
+    <string name="pref_spam_list_title">Blocked messages</string>
+    <string name="pref_sender_category">Sender Filter</string>
+    <string name="pref_pick_from_inbox">Pick from Inbox</string>
+
+    <string name="title_activity_spam_list">Blocked messages</string>
+    <string name="title_activity_spam_detail">Message</string>
+
+    <string name="title_activity_sender_black_list">Sender Black List</string>
+    <string name="sender_black_list_section_custom">Custom</string>
+    <string name="sender_black_list_section_public">Public</string>
+
+    <string name="title_activity_inbox">InboxActivity</string>
+    <string name="inbox_blocked">blocked</string>
+    <string name="inbox_unblocked"></string>
+</resources>
