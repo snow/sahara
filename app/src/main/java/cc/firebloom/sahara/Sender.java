@@ -33,8 +33,16 @@ public class Sender {
         num = num.replaceAll("[^+0-9]", "");
         if (num.startsWith("+")) {
             return num;
-        } else if (num.startsWith("86")) {
+
+        } else if (num.startsWith("100") || num.startsWith("1065") || num.startsWith("1069")) {
+            return num;
+
+        } else if (num.startsWith("95") && num.length() == 5) {
+            return num;
+
+        } else if (num.startsWith("86") && num.length() == 13) {
             return "+" + num;
+
         } else {
             return "+86" + num; // it's for China only for now
         }
